@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<runindex>
+  <group name ="Weather">
+    <f runindex="0" content="111" type="warning"></f>
+  </group>
+  <group name ="XmlBase">
+    <f runindex="1" content="已创建Xml文件所在文件夹的路径" type="Message"></f>
+  </group>
+</runindex>

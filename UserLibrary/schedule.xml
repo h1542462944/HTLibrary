@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<struct>
+  <updates>
+    <f date="20171021">
+      说明:<!--1获得信息的类数据统一写在结构或类(*Info)里面-->
+      <!--2错误信息的获取与处理统一写在类UserException;数据由UserExceptionEventarg提供.-->
+      <!--3设计数据的转换写在工具类Switch(只提供函数,常量和只读字段.)(函数命名为Get-From)-->
+    </f>
+  </updates>
+  <namespace >
+  </namespace>
+
+</struct>
+

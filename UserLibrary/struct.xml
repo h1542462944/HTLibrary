@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<struct>
+  <updates>
+    <add date="20171021">
+      说明:<!--1获得信息的类数据统一写在结构或类(*Info)里面-->
+      <!--2错误信息的获取与处理统一写在类UserException;数据由UserExceptionEventarg提供.-->
+      <!--3设计数据的转换写在工具类Switch(只提供函数,常量和只读字段.)(函数命名为Get-From)-->
+    </add>
+    <add date="20171205">
+      说明:<!--1更新了用户设置类EProperty<TValue>,支持实时更新-->
+    </add>
+    <add date="20180112 - 20180119">
+      说明:<!--1新建设置类USettings,简化操作.-->
+      <!--2新建类UProperty<T>泛型类,优化转换操作.-->
+      <!--3ULogger支持写入bug和message-->
+    </add>
+  </updates>
+  <files>
+    
+  </files>
+  <namespace name="User">
+    <![CDATA[已弃用]]>
+    <class name="Switcher" detail="用于存放基础的转换类."/>
+    <class name="Tools" detail="用于存放频繁使用的方法类."/>
+    <class name ="Extension" detail="拓展方法专用类"/>
+    <class name="XmlBase" detail="给基于Xml的存储类提供基类."/>
+    <namespace name="BaseMethod">
+      <![CDATA[已弃用]]>
+      <class name="XmlBase" detail="为Xml文档提供基础方法."/>
+      <![CDATA[已弃用]]>
+      <class name="XmlElementInfo" detail="为Xml节点和属性提供数据."/>
+      <![CDATA[已弃用]]>
+      <class name="XmlElementList" detail="Xml节点属性的集合."/>
+    </namespace>
+    <![CDATA[已弃用]]>
+    <namespace name="Info">
+      <![CDATA[已弃用]]>
+      <class name="Ftp..."/>
+      
+    </namespace>
+    <namespace name="SoftWare">
+      <![CDATA[已弃用]]>
+      <interface name="ISettingsConvert"/>
+      <interface name="IUSettingsConvertArray"/>
+      <interface name="IUSettingsConvert"/>
+      <class name="USettings"/>
+      <class name="USettingsProperty"/>
+      <class name="USettingsProperty?T?"/>
+      <class name="USettingsPropertyCollection"/>
+      <delegate name="USettingsChangedEventHander"/>
+    </namespace>
+  </namespace>
+
+</struct>
+
