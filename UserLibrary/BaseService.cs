@@ -58,7 +58,7 @@ namespace User
         public static System.Windows.Point GetMousePosition()
         {
             System.Drawing.Point point = System.Windows.Forms.Control.MousePosition;
-            return new System.Windows.Point(point.X, point.Y);
+            return new System.Windows.Point(point.X / UI.PrimaryScreen.ScaleX , point.Y  / UI.PrimaryScreen.ScaleY);
         }
         public static string ShortTimeStringInvoke(string hour, string minute)
         {

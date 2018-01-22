@@ -11,6 +11,7 @@ using System.Windows.Shapes;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Threading;
+using System.ComponentModel;
 
 namespace User.UI
 {
@@ -36,6 +37,11 @@ namespace User.UI
             Rect rect = new Rect(0, 0, SystemParameters.PrimaryScreenWidth, SystemParameters.PrimaryScreenHeight);
             return GetScreenBitmap(rect);
         }
+        public static Drawing.Bitmap GetScreenBitmap(Window window)
+        {
+            Rect rect = new Rect(window.Left, window.Top, window.Width, window.Height);
+            return GetScreenBitmap(rect);
+        }
         public static BitmapImage GetScreenBitmapImage(Rect area)
         {
             Drawing.Bitmap bitmap = GetScreenBitmap(area);
@@ -57,6 +63,7 @@ namespace User.UI
 
         public static bool[] GetScreenIsRelativeDark(params ImagePickerAna[] anas)
         {
+            float scaling = PrimaryScreen.ScaleX;
             List<bool> result = new List<bool>();
             Drawing.Bitmap bitmap = GetScreenBitmap();
             foreach (var item in anas)
@@ -65,12 +72,12 @@ namespace User.UI
                 List<double> Xs = new List<double>();
                 for (int i = 0; i < item.Xnum; i++)
                 {
-                    Xs.Add(item.Area.Left + (i / (double)(item.Xnum - 1)) * item.Area.Width);
+                    Xs.Add((item.Area.Left + (i / (double)(item.Xnum - 1)) * item.Area.Width) *scaling);
                 }
                 List<double> Ys = new List<double>();
                 for (int i = 0; i < item.Ynum; i++)
                 {
-                    Ys.Add(item.Area.Top + (i / (double)(item.Ynum - 1)) * item.Area.Height);
+                    Ys.Add((item.Area.Top + (i / (double)(item.Ynum - 1)) * item.Area.Height) * scaling);
                 }
                 for (int i = 0; i < item.Xnum; i++)
                 {
@@ -161,6 +168,7 @@ namespace User.UI
         public int Middlevalue { get => middlevalue; set => middlevalue = value; }
         public Window Window { get => window; set => window = value; }
     }
+    [Obsolete]
     /// <summary>
     /// 自动变色监视器(以集合,同步的方式进行),已内置了计时器.
     /// </summary>
@@ -244,6 +252,7 @@ namespace User.UI
         public bool IsEnabled { get => innertimer.IsEnabled; set => innertimer.IsEnabled = value; }
         public ImagePickerAna[] Anas => anas;
     }
+    [Obsolete]
     /// <summary>
     /// 自动变色监视器的数据.
     /// </summary>
@@ -267,6 +276,163 @@ namespace User.UI
         public int[] Indexs => indexs;
         public bool[] IsRelativeDarks => isRelativeDarks;
     }
+
+    public struct ScreenMonitorAna
+    {
+        Rect area;
+        int xnum;
+        int ynum;
+        int middleColorValue;
+
+        public ScreenMonitorAna(Rect area, int xnum, int ynum, int middleColorValue = 230)
+        {
+            this.area = area;
+            this.xnum = xnum;
+            this.ynum = ynum;
+            this.middleColorValue = middleColorValue;
+        }
+        public ScreenMonitorAna(Window window, int xnum, int ynum, int middleColorValue = 230) : this(new Rect(window.Left, window.Top, window.Width, window.Height), xnum, ynum, middleColorValue)
+        {
+        }
+        public ScreenMonitorAna(Window window) : this(window, 3, 3)
+        {
+        }
+
+        public Rect Area { get => area; set => area = value; }
+        public int Xnum { get => xnum; set => xnum = value; }
+        public int Ynum { get => ynum; set => ynum = value; }
+        public int Middlevalue { get => middleColorValue; set => middleColorValue = value; }
+    }
+    public class ScreenMonitor
+    {
+        private DispatcherTimer innertimer = new DispatcherTimer()
+        {
+            Interval = TimeSpan.FromSeconds(1),
+            IsEnabled = false
+        };
+        private int tick = 0;
+        private List<ScreenMonitorProperty> properties = new List<ScreenMonitorProperty>();
+        private int xnum = 3;
+        private int ynum = 3;
+        private int middleColorValue = 230;
+
+        public ScreenMonitor()
+        {
+            innertimer.Tick += Innertimer_Tick;
+        }
+
+        public bool IsEnabled { get => innertimer.IsEnabled; set => innertimer.IsEnabled = value; }
+        public List<ScreenMonitorProperty> Properties { get => properties; }
+        public int Xnum { get => xnum; set => xnum = value; }
+        public int Ynum { get => ynum; set => ynum = value; }
+        public int MiddleColorValue { get => middleColorValue; set => middleColorValue = value; }
+
+        public ScreenMonitorProperty Register(Window window)
+        {
+            ScreenMonitorProperty property = new ScreenMonitorProperty(window);
+            properties.Add(property);
+            return property;
+        }
+
+        private void Innertimer_Tick(object sender, EventArgs e)
+        {
+            List<int> list = new List<int>();
+            List<ImagePickerAna> imagepickeranas = new List<ImagePickerAna>();
+            foreach (var item in properties)
+            { 
+                imagepickeranas.Add(new ImagePickerAna(item.Window,this.xnum,this.ynum,this.middleColorValue));
+            }
+            //Console.WriteLine(tick);
+            if (tick <= 5 || tick == 13)
+            {
+                bool[] values = ImagePicker.GetScreenIsRelativeDark(imagepickeranas.ToArray());
+                bool ischanged = false;
+                for (int i = 0; i < properties.Count; i++)
+                {
+                    if (tick >=1)
+                    {
+                        if (properties[i].IsRelativeDark != values[i])
+                        {
+                            ischanged = true;
+                        }
+                    }
+                    properties[i]._IsRelativeDark = values[i];
+                }
+                if (tick == 0)
+                {
+                    tick = 1;
+                }
+                else
+                {
+                    if (ischanged)
+                    {
+                        tick = 1;
+                    }
+                    else
+                    {
+                        if (tick<=5)
+                        {
+                            tick++;
+                        }
+                        else
+                        {
+                            tick = 6;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                tick++;
+            }
+        }
+    }
+    public class ScreenMonitorProperty:System.ComponentModel.INotifyPropertyChanged
+    {
+        bool? isRelativeDark = null;
+        Window window;
+
+        public Window Window { get => window; }
+        public bool IsRelativeDark { get => (bool)isRelativeDark; }
+        internal bool _IsRelativeDark
+        {
+            set
+            {
+                if (isRelativeDark == null || (bool)isRelativeDark != value)
+                {
+                    isRelativeDark = value;
+                    IsRelativeDarkChanged?.Invoke(this, new IsRelativeDarkChangedEventargs(window, value));
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsRelativeDark"));
+                }
+                else
+                {
+                    isRelativeDark = value;
+                }
+            }
+        }
+        public event EventHandler<IsRelativeDarkChangedEventargs> IsRelativeDarkChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public ScreenMonitorProperty(Window window)
+        {
+            this.window = window;
+        }
+    }
+    public class IsRelativeDarkChangedEventargs
+    {
+        Window window;
+        bool isRelativeDark;
+
+        public IsRelativeDarkChangedEventargs(Window window, bool isRelativeDark)
+        {
+            this.window = window;
+            this.isRelativeDark = isRelativeDark;
+        }
+
+        public Window Window => window;
+        public bool IsRelativeDark => isRelativeDark;
+    }
+
     /// <summary>
     /// Win32API 可以获取Dpi和缩放比率.
     /// </summary>
@@ -355,14 +521,25 @@ namespace User.UI
         /// </summary>  
         public static float ScaleX
         {
+            //get
+            //{
+            //    IntPtr hdc = GetDC(IntPtr.Zero);
+            //    int t = GetDeviceCaps(hdc, DESKTOPHORZRES);
+            //    int d = GetDeviceCaps(hdc, HORZRES);
+            //    float ScaleX = (float)GetDeviceCaps(hdc, DESKTOPHORZRES) / (float)GetDeviceCaps(hdc, HORZRES);
+            //    ReleaseDC(IntPtr.Zero, hdc);
+            //    if (DESKTOP.Width == 3840)
+            //    {
+            //        return ScaleX * 3.0f;
+            //    }
+            //    else
+            //    {
+            //        return ScaleX;
+            //    }
+            //}
             get
             {
-                IntPtr hdc = GetDC(IntPtr.Zero);
-                int t = GetDeviceCaps(hdc, DESKTOPHORZRES);
-                int d = GetDeviceCaps(hdc, HORZRES);
-                float ScaleX = (float)GetDeviceCaps(hdc, DESKTOPHORZRES) / (float)GetDeviceCaps(hdc, HORZRES);
-                ReleaseDC(IntPtr.Zero, hdc);
-                return ScaleX;
+                return (float)( DESKTOP.Width / SystemParameters.PrimaryScreenWidth);
             }
         }
         /// <summary>  
@@ -370,12 +547,16 @@ namespace User.UI
         /// </summary>  
         public static float ScaleY
         {
+            //get
+            //{
+            //    IntPtr hdc = GetDC(IntPtr.Zero);
+            //    float ScaleY = (float)(float)GetDeviceCaps(hdc, DESKTOPVERTRES) / (float)GetDeviceCaps(hdc, VERTRES);
+            //    ReleaseDC(IntPtr.Zero, hdc);
+            //    return ScaleX;
+            //}
             get
             {
-                IntPtr hdc = GetDC(IntPtr.Zero);
-                float ScaleY = (float)(float)GetDeviceCaps(hdc, DESKTOPVERTRES) / (float)GetDeviceCaps(hdc, VERTRES);
-                ReleaseDC(IntPtr.Zero, hdc);
-                return ScaleY;
+                return (float)( DESKTOP.Height / SystemParameters.PrimaryScreenHeight);
             }
         }
         #endregion

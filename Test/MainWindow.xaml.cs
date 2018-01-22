@@ -57,11 +57,19 @@ namespace Test
             //var bitmapimage = ImagePicker.GetScreenBitmapImage(new Rect(0, 0, SystemParameters.PrimaryScreenWidth, SystemParameters.PrimaryScreenHeight));
             //bitmap.Save(AppDomain.CurrentDomain.BaseDirectory + "1.bmp");
             //bitmapimage.Save(AppDomain.CurrentDomain.BaseDirectory + "1.bmp");
-            imagepicker = new ImagePickerMonitor(new ImagePickerAna(this, 3, 3))
-            {
-                IsEnabled = true
-            };
+            //imagepicker = new ImagePickerMonitor(new ImagePickerAna(this, 3, 3))
+            //{
+            //    IsEnabled = true
+            //};
             // Console.WriteLine(User.UI.PrimaryScreen.ScaleX);
+            //Console.WriteLine(PrimaryScreen.WorkingArea);
+            //Console.WriteLine(PrimaryScreen.DpiX);
+            Console.WriteLine(PrimaryScreen.DESKTOP);
+            //Console.WriteLine(PrimaryScreen.ScaleX);
+            //Console.WriteLine(PrimaryScreen.ScaleY);
+            //Console.WriteLine(Tools.GetMousePosition());
+            //Console.WriteLine(this.Left);
+            //Console.WriteLine(Mouse.GetPosition(this));
         }
     }
     public struct Cr : IUSettingsConvertArray
