@@ -4,10 +4,16 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Test"
+        xmlns:libr="clr-namespace:User.UI;assembly=UserLibrary"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        <Button Content="Button" HorizontalAlignment="Left" Height="34" Margin="62,51,0,0" VerticalAlignment="Top" Width="87" Click="Button_Click"/>
+    <Grid Background="#FF797676">
+        <libr:TriggerImage x:Name="TriggerImage1" VerticalAlignment="Top" ControlStyle="Dark" HorizontalAlignment="Left" Height="40" Width="40" Margin="176,82,0,0"/>
+        <libr:TriggerSwitch HorizontalAlignment="Left" Height="20" Margin="245,102,0,0" VerticalAlignment="Top" Width="50" ThemeColor="DeepSkyBlue" IsChecked="True" IsEnabled="True"/>
+        <libr:SlideBar x:Name="SliderBar1" HorizontalAlignment="Left" Height="27" Margin="98,144,0,0" VerticalAlignment="Top" Width="140" SlideValue="52" ControlStyle="Dark" SlideStyle="TickValue" SlideValueChanged="SlideBar_SlideValueChanged" TickValue="42" />
+        <Label x:Name="Lbl1" Content="Label" HorizontalAlignment="Left" Height="30" Margin="251,144,0,0" VerticalAlignment="Top" Width="59"/>
+        <libr:ColorPicker x:Name="ColorPicker1" HorizontalAlignment="Left" Height="205" Margin="323,92,0,0" VerticalAlignment="Top" Width="188" />
+
 
     </Grid>
 </Window>

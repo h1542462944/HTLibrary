@@ -6,6 +6,8 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Xml.Linq;
 
+[assembly: CLSCompliant(true)]
+
 namespace User
 {
     public static  class Tools

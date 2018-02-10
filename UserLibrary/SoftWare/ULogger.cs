@@ -119,9 +119,10 @@ namespace User.SoftWare
         }
         private ExceptionInfo ConvertToValue(XElement element)
         {
-            Dictionary<string, string> contents = new Dictionary<string, string>();
-
-                contents.Add("message", element.Attribute("message").Value);
+            Dictionary<string, string> contents = new Dictionary<string, string>
+            {
+                { "message", element.Attribute("message").Value }
+            };
             throw new NotImplementedException();
         }
     }

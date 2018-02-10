@@ -1,0 +1,35 @@
+﻿<local:UContol x:Class="User.UI.SlideBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:User.UI"
+             mc:Ignorable="d" >
+    <Grid Background="Transparent" MouseDown="Grid_MouseDown" MouseMove="Grid_MouseMove" MouseUp="Grid_MouseUp" MouseLeave="Grid_MouseLeave">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="10"/>
+        </Grid.ColumnDefinitions>
+        <Border x:Name="BdrHighlight" Grid.RowSpan="5" Grid.ColumnSpan="3" BorderThickness="2" BorderBrush="White" Visibility="Hidden" />
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="6*"/>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="3*"/>
+            </Grid.RowDefinitions>
+            <Border x:Name="BdrBack" Grid.Row="2"/>
+            <Grid Margin="-10,0" Grid.Row="1" Grid.RowSpan="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="6"/>
+                    <ColumnDefinition x:Name="ColumnDefi0" Width="0.16*"/>
+                    <ColumnDefinition x:Name="ColumnDefi1" Width="0.84*"/>
+                    <ColumnDefinition Width="14"/>
+                </Grid.ColumnDefinitions>
+                <Border x:Name="BdrM" Grid.Column="2" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="8" Background="White"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</local:UContol>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>propup</Title>
+      <Shortcut>propup</Shortcut>
+      <Description>
+        为软件提供自动化保存信息的属性..
+        语言版本:  C# 3.0 或更高版本
+      </Description>
+      <Author>ht c</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Declarations>
+        <Literal>
+          <ID>type</ID>
+          <ToolTip>设置类别.</ToolTip>
+          <Default>int</Default>
+        </Literal>
+        <Literal>
+          <ID>My</ID>
+          <ToolTip>设置的名称</ToolTip>
+          <Default>My</Default>
+        </Literal>
+        <Literal>
+          <ID>uSettings</ID>
+          <ToolTip>依赖的对象</ToolTip>
+          <Default>uSettings</Default>
+        </Literal>
+        <Literal>
+          <ID>default</ID>
+          <ToolTip>初始值</ToolTip>
+          <Default>0</Default>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp">
+        <![CDATA[public USettingsProperty<$type$> $My$Property;
+      public $type$ $My$ {get => $My&Property.Value; set => $My$Property.Value = value; }
+   
+      $My$Property = $uSettings$.Register("$My$",$default$);
+      ]]>
+      </Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

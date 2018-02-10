@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-[assembly: CLSCompliant(true)]
+
 namespace User.SoftWare
 {
     /// <summary>
@@ -16,7 +16,7 @@ namespace User.SoftWare
     /// </summary>
     public interface IUSettingsConvertArray
     {
-        object USettingsConvertArray(object[] contents);
+        IUSettingsConvertArray USettingsConvertArray(object[] contents);
         object[] USettingsConvertArray();
     }
     /// <summary>
@@ -156,7 +156,7 @@ namespace User.SoftWare
                         var oldvalue = arg.Value;
                         var value = GetValue(arg);
                         arg.Replace(value);
-                        USettingsChanged?.Invoke(new USettingsKey(this,name), new USettingsChangedEventargs(oldvalue, value));
+                        USettingsChanged?.Invoke(new USettingsKey(this,name), new PropertyChangedEventargs(oldvalue, value));
                         return value;
                     }
                     else
@@ -177,7 +177,7 @@ namespace User.SoftWare
                     object oldvalue = arg.Value;
                     arg.Replace(value);
                     SetValue(arg);
-                    USettingsChanged?.Invoke(new USettingsKey(this,name), new USettingsChangedEventargs(oldvalue, value));
+                    USettingsChanged?.Invoke(new USettingsKey(this,name), new PropertyChangedEventargs(oldvalue, value));
                 }
                 else
                 {
@@ -496,12 +496,18 @@ namespace User.SoftWare
     /// <summary>
     /// 设置改变或初始化加载时触发的事件数据.
     /// </summary>
-    public sealed class USettingsChangedEventargs:EventArgs
+    public sealed class PropertyChangedEventargs : PropertyChangedEventargs<object>
     {
-        object oldValue;
-        object newValue;
+        public PropertyChangedEventargs(object oldValue, object newValue) : base(oldValue, newValue)
+        {
+        }
+    }
+    public class PropertyChangedEventargs<TValue>:EventArgs
+    {
+        TValue oldValue;
+        TValue newValue;
 
-        public USettingsChangedEventargs(object oldValue, object newValue)
+        public PropertyChangedEventargs(TValue oldValue, TValue newValue)
         {
             this.oldValue = oldValue;
             this.newValue = newValue;
@@ -509,19 +515,17 @@ namespace User.SoftWare
         /// <summary>
         /// 设置改变前的值.
         /// </summary>
-        public object OldValue => oldValue;
+        public TValue OldValue => oldValue;
         /// <summary>
         /// 设置改变后的值.
         /// </summary>
-        public object NewValue => newValue;
+        public TValue NewValue => newValue;
         /// <summary>
         ///是否是初始化的设置.
         /// </summary>
         public bool IsNewest => OldValue == null;
-
-
-
     }
+
 
     public sealed class USettingsKey:IEquatable<USettingsKey>,IEquatable<USettingsProperty>
     {
@@ -784,5 +788,6 @@ namespace User.SoftWare
         }
 
     }
-    public delegate void USettingsChangedEventHander(USettingsKey key, USettingsChangedEventargs e);
+    public delegate void USettingsChangedEventHander(USettingsKey key, PropertyChangedEventargs e);
+    public delegate void PropertyChangedEventHander<TValue>(object sender, PropertyChangedEventargs<TValue> e);
 }

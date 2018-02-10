@@ -1,0 +1,15 @@
+﻿<local:CheckControl x:Class="User.UI.TriggerImage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:User.UI"
+             mc:Ignorable="d" 
+             d:DesignHeight="40" d:DesignWidth="40">
+    <Grid x:Name="GridMain" Background="Transparent" MouseMove="Grid_MouseMove" MouseLeave="Grid_MouseLeave" MouseUp="Grid_MouseUp" MouseDown="Grid_MouseDown" RenderTransformOrigin="0.5,0.5">
+        <Border x:Name="BdrBack" Background="White" Visibility="Visible"/>
+        <Image x:Name="Img"/>
+        <Border x:Name="BdrHighlight" BorderThickness="3" BorderBrush="White" Visibility="Hidden"/>
+        <Border x:Name="Bdr" BorderThickness="3" BorderBrush="#99FFFFFF" Visibility="Hidden"/>
+    </Grid>
+</local:CheckControl>

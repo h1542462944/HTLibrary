@@ -15,268 +15,6 @@ using System.ComponentModel;
 
 namespace User.UI
 {
-    /// <summary>
-    /// 实现截图器的辅助类.
-    /// </summary>
-    public static class ImagePicker
-    {
-        public static Drawing.Bitmap GetScreenBitmap(Rect area)
-        {
-            float scaling = PrimaryScreen.ScaleX;
-            Drawing.Rectangle rx = new Drawing.Rectangle((int)(area.X * scaling), (int)(area.Y * scaling), (int)(area.Width * scaling), (int)(area.Height * scaling));
-            var bitmap = new Drawing.Bitmap(rx.Width, rx.Height, Drawing.Imaging.PixelFormat.Format32bppArgb);
-            using (Drawing.Graphics g = Drawing.Graphics.FromImage(bitmap))
-            {
-                g.CopyFromScreen(rx.X, rx.Y, 0, 0, rx.Size, Drawing.CopyPixelOperation.SourceCopy);
-            }
-            return bitmap;
-
-        }
-        public static Drawing.Bitmap GetScreenBitmap()
-        {
-            Rect rect = new Rect(0, 0, SystemParameters.PrimaryScreenWidth, SystemParameters.PrimaryScreenHeight);
-            return GetScreenBitmap(rect);
-        }
-        public static Drawing.Bitmap GetScreenBitmap(Window window)
-        {
-            Rect rect = new Rect(window.Left, window.Top, window.Width, window.Height);
-            return GetScreenBitmap(rect);
-        }
-        public static BitmapImage GetScreenBitmapImage(Rect area)
-        {
-            Drawing.Bitmap bitmap = GetScreenBitmap(area);
-            try
-            {
-                MemoryStream ms = new MemoryStream();
-                bitmap.Save(ms, Drawing.Imaging.ImageFormat.Bmp);
-                BitmapImage bitmapImage = new BitmapImage();
-                bitmapImage.BeginInit();
-                bitmapImage.StreamSource = new MemoryStream(ms.ToArray());
-                bitmapImage.EndInit();
-                return bitmapImage;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-
-        public static bool[] GetScreenIsRelativeDark(params ImagePickerAna[] anas)
-        {
-            float scaling = PrimaryScreen.ScaleX;
-            List<bool> result = new List<bool>();
-            Drawing.Bitmap bitmap = GetScreenBitmap();
-            foreach (var item in anas)
-            {
-                int tresult = 0;
-                List<double> Xs = new List<double>();
-                for (int i = 0; i < item.Xnum; i++)
-                {
-                    Xs.Add((item.Area.Left + (i / (double)(item.Xnum - 1)) * item.Area.Width) *scaling);
-                }
-                List<double> Ys = new List<double>();
-                for (int i = 0; i < item.Ynum; i++)
-                {
-                    Ys.Add((item.Area.Top + (i / (double)(item.Ynum - 1)) * item.Area.Height) * scaling);
-                }
-                for (int i = 0; i < item.Xnum; i++)
-                {
-                    for (int j = 0; j < item.Ynum; j++)
-                    {
-                        /*奇怪的问题,不能等于宽度*/
-                        if (Xs[i] >= bitmap.Width)
-                        {
-                            Xs[i] = bitmap.Width - 1;
-                        }
-                        else if (Xs[i] <0)
-                        {
-                            Xs[i] = 0;
-                        }
-                        if (Ys[j] >= bitmap.Height)
-                        {
-                            Ys[j] = bitmap.Height - 1;
-                        }
-                        else if (Ys[j] <0)
-                        {
-                            Ys[j] = 0;
-                        }
-                        Drawing.Color color = bitmap.GetPixel((int)Xs[i], (int)Ys[j]);
-                        if (color.R + color.G + color.B > item.Middlevalue)
-                        {
-                            //Console.WriteLine("x:{0} y:{1}", Xs[i], Ys[i]);
-                        }
-                        else
-                        {
-                            tresult++;
-                        }
-                    }
-                }
-                if (tresult > item.Xnum * item.Ynum / 2.0)
-                {
-                    result.Add(true);
-                }
-                else
-                {
-                    result.Add(false);
-                }
-            }
-            return result.ToArray();
-        }
-    }
-    /// <summary>
-    /// ImagePicker 和 ImagePickerMonitor的数据,注意:如果指定window则Area直接重定向至窗体的数据.
-    /// </summary>
-    public class ImagePickerAna
-    {
-        Rect area;
-        int xnum;
-        int ynum;
-        int middlevalue;
-        Window window;
-
-        public ImagePickerAna(Rect area, int xnum, int ynum, int middlevalue = 230)
-        {
-            this.area = area;
-            this.xnum = xnum;
-            this.ynum = ynum;
-            this.middlevalue = middlevalue;
-            window = null;
-        }
-        public ImagePickerAna(Window window, int xnum, int ynum, int middlevalue = 230) : this(new Rect(window.Left, window.Top, window.Width, window.Height), xnum, ynum, middlevalue)
-        {
-           this.window = window;
-        }
-        public ImagePickerAna(Window window) : this(window, 3, 3)
-        {
-            this.window = window;
-        }
-
-        public Rect Area { get
-            {
-                if (window == null)
-                {
-                    return area;
-                }
-                else
-                {
-                    return new Rect(this.window.Left, this.window.Top, this.window.Width, this.window.Height);
-                }
-            }
-            set => area = value; }
-        public int Xnum { get => xnum; set => xnum = value; }
-        public int Ynum { get => ynum; set => ynum = value; }
-        public int Middlevalue { get => middlevalue; set => middlevalue = value; }
-        public Window Window { get => window; set => window = value; }
-    }
-    [Obsolete]
-    /// <summary>
-    /// 自动变色监视器(以集合,同步的方式进行),已内置了计时器.
-    /// </summary>
-    public class ImagePickerMonitor
-    {
-        private ImagePickerAna[] anas;
-        /// <summary>
-        ///0为初始值,1-5为活跃状态,6-13为休眠状态.
-        /// </summary>
-        private int tick;
-        private bool[] prev;
-        private DispatcherTimer innertimer = new DispatcherTimer()
-        {
-            Interval = TimeSpan.FromSeconds(1),
-            IsEnabled = false
-        };
-        public event EventHandler<ImagePickerEventargs> IsRelativeDarkChanged;
-
-        public ImagePickerMonitor(params ImagePickerAna[] anas)
-        {
-            this.anas = anas;
-            this.tick = 0;
-            this.prev = new bool[anas.Length];
-            innertimer.Tick += Innertimer_Tick;
-        }
-        private void Innertimer_Tick(object sender, EventArgs e)
-        {
-            List<int> list = new List<int>();
-            //Console.WriteLine(tick);
-            if (tick <= 5 || tick == 13)
-            {
-                bool[] values = ImagePicker. GetScreenIsRelativeDark(anas);
-
-                if (tick == 0)
-                {
-                    for (int i = 0; i < prev.Length; i++)
-                    {
-                        list.Add(i);
-                    }
-                    tick++;
-
-                }
-                else
-                {
-                    bool ischanged = false;
-                    for (int i = 0; i < values.Length; i++)
-                    {
-                        //Console.WriteLine("{0} {1}",prev[i],values[i]);
-                        if (prev[i] != values[i])
-                        {
-                            ischanged = true;
-                            list.Add(i);
-                        }
-                    }
-                    if (ischanged)
-                    {
-                        tick = 1;
-                    }
-                    else
-                    {
-                        if (tick == 13)
-                        {
-                            tick = 6;
-                        }
-                        else
-                        {
-                            tick++;
-                        }
-                        return;
-                    }
-                }
-                prev = values;
-                IsRelativeDarkChanged?.Invoke(this, new ImagePickerEventargs(list.ToArray(), values));
-            }
-            else
-            {
-                tick++;
-            }
-        }
-
-        public bool IsEnabled { get => innertimer.IsEnabled; set => innertimer.IsEnabled = value; }
-        public ImagePickerAna[] Anas => anas;
-    }
-    [Obsolete]
-    /// <summary>
-    /// 自动变色监视器的数据.
-    /// </summary>
-    public struct ImagePickerEventargs
-    {
-        /// <summary>
-        /// 发生改变的ImagePickerAna的索引集合,值由注册ImagePickerMonitor的数组决定.
-        /// </summary>
-        int[] indexs;
-        /// <summary>
-        /// 发生改变时,是否是暗色背景的集合,Length = 注册ImagePickerMonitor的数组长度.
-        /// </summary>
-        bool[] isRelativeDarks;
-
-        public ImagePickerEventargs(int[] indexs, bool[] isRelativeDarks)
-        {
-            this.indexs = indexs;
-            this.isRelativeDarks = isRelativeDarks;
-        }
-
-        public int[] Indexs => indexs;
-        public bool[] IsRelativeDarks => isRelativeDarks;
-    }
-
     public struct ScreenMonitorAna
     {
         Rect area;
@@ -336,55 +74,165 @@ namespace User.UI
 
         private void Innertimer_Tick(object sender, EventArgs e)
         {
-            List<int> list = new List<int>();
-            List<ImagePickerAna> imagepickeranas = new List<ImagePickerAna>();
-            foreach (var item in properties)
-            { 
-                imagepickeranas.Add(new ImagePickerAna(item.Window,this.xnum,this.ynum,this.middleColorValue));
-            }
-            //Console.WriteLine(tick);
-            if (tick <= 5 || tick == 13)
+            try
             {
-                bool[] values = ImagePicker.GetScreenIsRelativeDark(imagepickeranas.ToArray());
-                bool ischanged = false;
-                for (int i = 0; i < properties.Count; i++)
+                List<int> list = new List<int>();
+                List<ScreenMonitorAna> imagepickeranas = new List<ScreenMonitorAna>();
+                foreach (var item in properties)
                 {
-                    if (tick >=1)
+                    imagepickeranas.Add(new ScreenMonitorAna(item.Window, this.xnum, this.ynum, this.middleColorValue));
+                }
+                //Console.WriteLine(tick);
+                if (tick <= 5 || tick == 13)
+                {
+                    bool[] values = GetScreenIsRelativeDark(imagepickeranas.ToArray());
+                    bool ischanged = false;
+                    for (int i = 0; i < properties.Count; i++)
                     {
-                        if (properties[i].IsRelativeDark != values[i])
+                        if (tick >= 1)
                         {
-                            ischanged = true;
+                            if (properties[i].IsRelativeDark != values[i])
+                            {
+                                ischanged = true;
+                            }
                         }
+                        properties[i]._IsRelativeDark = values[i];
                     }
-                    properties[i]._IsRelativeDark = values[i];
-                }
-                if (tick == 0)
-                {
-                    tick = 1;
-                }
-                else
-                {
-                    if (ischanged)
+                    if (tick == 0)
                     {
                         tick = 1;
                     }
                     else
                     {
-                        if (tick<=5)
+                        if (ischanged)
                         {
-                            tick++;
+                            tick = 1;
                         }
                         else
                         {
-                            tick = 6;
+                            if (tick <= 5)
+                            {
+                                tick++;
+                            }
+                            else
+                            {
+                                tick = 6;
+                            }
                         }
                     }
                 }
+                else
+                {
+                    tick++;
+                }
             }
-            else
+            catch (Exception)//句柄无效
             {
-                tick++;
+
             }
+        }
+
+        public static Drawing.Bitmap GetScreenBitmap(Rect area)
+        {
+            float scaling = PrimaryScreen.ScaleX;
+            Drawing.Rectangle rx = new Drawing.Rectangle((int)(area.X * scaling), (int)(area.Y * scaling), (int)(area.Width * scaling), (int)(area.Height * scaling));
+            var bitmap = new Drawing.Bitmap(rx.Width, rx.Height, Drawing.Imaging.PixelFormat.Format32bppArgb);
+            using (Drawing.Graphics g = Drawing.Graphics.FromImage(bitmap))
+            {
+                g.CopyFromScreen(rx.X, rx.Y, 0, 0, rx.Size, Drawing.CopyPixelOperation.SourceCopy);
+            }
+            return bitmap;
+
+        }
+        public static Drawing.Bitmap GetScreenBitmap()
+        {
+            Rect rect = new Rect(0, 0, SystemParameters.PrimaryScreenWidth, SystemParameters.PrimaryScreenHeight);
+            return GetScreenBitmap(rect);
+        }
+        public static Drawing.Bitmap GetScreenBitmap(Window window)
+        {
+            Rect rect = new Rect(window.Left, window.Top, window.Width, window.Height);
+            return GetScreenBitmap(rect);
+        }
+        public static BitmapImage GetScreenBitmapImage(Rect area)
+        {
+            Drawing.Bitmap bitmap = GetScreenBitmap(area);
+            try
+            {
+                MemoryStream ms = new MemoryStream();
+                bitmap.Save(ms, Drawing.Imaging.ImageFormat.Bmp);
+                BitmapImage bitmapImage = new BitmapImage();
+                bitmapImage.BeginInit();
+                bitmapImage.StreamSource = new MemoryStream(ms.ToArray());
+                bitmapImage.EndInit();
+                return bitmapImage;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public static bool[] GetScreenIsRelativeDark(params ScreenMonitorAna[] anas)
+        {
+            float scaling = PrimaryScreen.ScaleX;
+            List<bool> result = new List<bool>();
+            Drawing.Bitmap bitmap = GetScreenBitmap();
+            foreach (var item in anas)
+            {
+                int tresult = 0;
+                List<double> Xs = new List<double>();
+                for (int i = 0; i < item.Xnum; i++)
+                {
+                    Xs.Add((item.Area.Left + (i / (double)(item.Xnum - 1)) * item.Area.Width) * scaling);
+                }
+                List<double> Ys = new List<double>();
+                for (int i = 0; i < item.Ynum; i++)
+                {
+                    Ys.Add((item.Area.Top + (i / (double)(item.Ynum - 1)) * item.Area.Height) * scaling);
+                }
+                for (int i = 0; i < item.Xnum; i++)
+                {
+                    for (int j = 0; j < item.Ynum; j++)
+                    {
+                        /*奇怪的问题,不能等于宽度*/
+                        if (Xs[i] >= bitmap.Width)
+                        {
+                            Xs[i] = bitmap.Width - 1;
+                        }
+                        else if (Xs[i] < 0)
+                        {
+                            Xs[i] = 0;
+                        }
+                        if (Ys[j] >= bitmap.Height)
+                        {
+                            Ys[j] = bitmap.Height - 1;
+                        }
+                        else if (Ys[j] < 0)
+                        {
+                            Ys[j] = 0;
+                        }
+                        Drawing.Color color = bitmap.GetPixel((int)Xs[i], (int)Ys[j]);
+                        if (color.R + color.G + color.B > item.Middlevalue)
+                        {
+                            //Console.WriteLine("x:{0} y:{1}", Xs[i], Ys[i]);
+                        }
+                        else
+                        {
+                            tresult++;
+                        }
+                    }
+                }
+                if (tresult > item.Xnum * item.Ynum / 2.0)
+                {
+                    result.Add(true);
+                }
+                else
+                {
+                    result.Add(false);
+                }
+            }
+            return result.ToArray();
         }
     }
     public class ScreenMonitorProperty:System.ComponentModel.INotifyPropertyChanged
@@ -467,9 +315,11 @@ namespace User.UI
             get
             {
                 IntPtr hdc = GetDC(IntPtr.Zero);
-                Size size = new Size();
-                size.Width = GetDeviceCaps(hdc, HORZRES);
-                size.Height = GetDeviceCaps(hdc, VERTRES);
+                Size size = new Size
+                {
+                    Width = GetDeviceCaps(hdc, HORZRES),
+                    Height = GetDeviceCaps(hdc, VERTRES)
+                };
                 ReleaseDC(IntPtr.Zero, hdc);
                 return size;
             }
@@ -508,9 +358,11 @@ namespace User.UI
             get
             {
                 IntPtr hdc = GetDC(IntPtr.Zero);
-                Size size = new Size();
-                size.Width = GetDeviceCaps(hdc, DESKTOPHORZRES);
-                size.Height = GetDeviceCaps(hdc, DESKTOPVERTRES);
+                Size size = new Size
+                {
+                    Width = GetDeviceCaps(hdc, DESKTOPHORZRES),
+                    Height = GetDeviceCaps(hdc, DESKTOPVERTRES)
+                };
                 ReleaseDC(IntPtr.Zero, hdc);
                 return size;
             }
