@@ -19,7 +19,7 @@ namespace User.UI
     /// <summary>
     /// ColorPicker.xaml 的交互逻辑
     /// </summary>
-    public partial class ColorPicker : UContol
+    public partial class ColorPicker : UControl
     {
         public ColorPicker()
         {

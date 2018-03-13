@@ -19,7 +19,7 @@ namespace User.UI
     /// <summary>
     /// SlideBar.xaml 的交互逻辑
     /// </summary>
-    public partial class SlideBar : UContol
+    public partial class SlideBar : UControl
     {
         public SlideBar()
         {

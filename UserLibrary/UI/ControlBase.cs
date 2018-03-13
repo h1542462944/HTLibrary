@@ -35,15 +35,15 @@ namespace User.UI
     /// <summary>
     /// 为用户控件提供统一的内容模型.
     /// </summary>
-    public class UContol : UserControl
+    public class UControl : UserControl
     {
         public static readonly DependencyProperty ControlStyleProperty =
-           DependencyProperty.Register("ControlStyle", typeof(ControlStyle), typeof(UContol), new PropertyMetadata(ControlStyle.Transparent, new PropertyChangedCallback(ControlStyle_Changed)));
+           DependencyProperty.Register("ControlStyle", typeof(ControlStyle), typeof(UControl), new PropertyMetadata(ControlStyle.Transparent, new PropertyChangedCallback(ControlStyle_Changed)));
         public static readonly DependencyProperty IsHighLightProperty =
-           DependencyProperty.Register("IsHighLight", typeof(bool), typeof(UContol), new PropertyMetadata(false, new PropertyChangedCallback(IsHighLight_Changed)));
+           DependencyProperty.Register("IsHighLight", typeof(bool), typeof(UControl), new PropertyMetadata(false, new PropertyChangedCallback(IsHighLight_Changed)));
         public static readonly DependencyProperty ThemeColorProperty =
-           DependencyProperty.Register("ThemeColor", typeof(Color), typeof(UContol), new PropertyMetadata(Colors.DeepSkyBlue, new PropertyChangedCallback(ThemeColor_Changed)));
-
+           DependencyProperty.Register("ThemeColor", typeof(Color), typeof(UControl), new PropertyMetadata(Colors.DeepSkyBlue, new PropertyChangedCallback(ThemeColor_Changed)));
+        bool isLeftMouseDown;
 
         public ControlStyle ControlStyle
         {
@@ -60,31 +60,45 @@ namespace User.UI
             get { return (Color)GetValue(ThemeColorProperty); }
             set { SetValue(ThemeColorProperty, value); }
         }
-
+        public event RoutedEventHandler Tapped;
         protected virtual void OnControlStyleChanged() { }
         protected virtual void OnHighLightChanged() { }
         protected virtual void OnThemeColor() { }
-
+        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+        {
+            isLeftMouseDown = true;
+        }
+        protected override void OnMouseLeave(MouseEventArgs e)
+        {
+            isLeftMouseDown = false;
+        }
+        protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
+        {
+            if (isLeftMouseDown)
+            {
+                Tapped?.Invoke(this, new RoutedEventArgs());
+            }
+        }
         private static void ControlStyle_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            UContol arg = (UContol)d;
+            UControl arg = (UControl)d;
             arg.OnControlStyleChanged();
         }
         private static void IsHighLight_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            UContol arg = (UContol)d;
+            UControl arg = (UControl)d;
             arg.OnHighLightChanged();
         }
         private static void ThemeColor_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            UContol arg = (UContol)d;
+            UControl arg = (UControl)d;
             arg.OnThemeColor();
         }
     }
     /// <summary>
     /// 为具有Check属性的控件提供基类.
     /// </summary>
-    public class CheckControl : UContol
+    public class CheckControl : UControl
     {
         public bool IsChecked
         {

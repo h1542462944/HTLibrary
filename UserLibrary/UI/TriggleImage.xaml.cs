@@ -108,39 +108,24 @@ namespace User.UI
                 this.Img.Source = source;
             }
         }
-       
-        private void Grid_MouseMove(object sender, MouseEventArgs e)
+        protected override void OnMouseDown(MouseButtonEventArgs e)
+        {
+            IsHighLight = false;
+        }
+        protected override void OnMouseMove(MouseEventArgs e)
         {
             this.Bdr.Visibility = Visibility.Visible;
-            if (Mouse.LeftButton == MouseButtonState.Pressed)
-            {
-                GridMain.RenderTransform = new ScaleTransform(0.95, 0.95);
-            }
-            else
-            {
-                GridMain.RenderTransform = new ScaleTransform(1.0, 1.0);
-            }
         }
-        private void Grid_MouseLeave(object sender, MouseEventArgs e)
+        protected override void OnMouseLeave(MouseEventArgs e)
         {
             this.Bdr.Visibility = Visibility.Hidden;
-            GridMain.RenderTransform = new ScaleTransform(1.0, 1.0);
         }
-        private void Grid_MouseUp(object sender, MouseButtonEventArgs e)
+        protected override void OnMouseUp(MouseButtonEventArgs e)
         {
-            if (CanAutoCheck && e.ChangedButton ==  MouseButton.Left)
+            if (CanAutoCheck && e.ChangedButton == MouseButton.Left)
             {
                 IsChecked = !IsChecked;
             }
-            GridMain.RenderTransform = new ScaleTransform(1.0, 1.0);
-        }
-        private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.LeftButton == MouseButtonState.Pressed)
-            {
-                GridMain.RenderTransform = new ScaleTransform(0.95, 0.95); 
-            }
-            IsHighLight = false;
         }
     }
 }

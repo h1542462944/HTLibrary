@@ -78,6 +78,9 @@
     <Compile Include="UI\TriggleImage.xaml.cs">
       <DependentUpon>TriggleImage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\UImageMenu.xaml.cs">
+      <DependentUpon>UImageMenu.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Include="UI\App.xaml">
@@ -97,6 +100,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\TriggleImage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\UImageMenu.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

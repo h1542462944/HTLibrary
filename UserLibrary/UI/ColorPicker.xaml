@@ -1,4 +1,4 @@
-﻿<local:UContol x:Class="User.UI.ColorPicker"
+﻿<local:UControl x:Class="User.UI.ColorPicker"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -167,4 +167,4 @@
             <TextBlock Text="取消" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" MouseUp="TbxCancel_MouseUp" />
         </Grid>
     </Grid>
-</local:UContol>
+</local:UControl>
