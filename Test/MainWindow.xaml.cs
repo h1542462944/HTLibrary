@@ -26,7 +26,7 @@ namespace Test
     /// </summary>
     public partial class MainWindow : Window
     {
-
+        Area area = new Area();
         public MainWindow()
         {
             InitializeComponent();
@@ -41,16 +41,16 @@ namespace Test
         {
             //Lbl1.Content = (int)e.NewValue;
         }
+
+        private void UImageMenu_Tapped(object sender, RoutedEventArgs e)
+        {
+
+            //Application.Current.Shutdown();
+        }
     }
 
     public class Area
     {
-        public USettings uSettings = new USettings(",", "sdfasdfas");
-        public USettingsProperty<int> p;
-        public void A()
-        {
-            p = uSettings.Register("t", 2);
-        }
-
+ 
     }
 }

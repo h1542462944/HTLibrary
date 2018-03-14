@@ -45,6 +45,13 @@ namespace User.UI
            DependencyProperty.Register("ThemeColor", typeof(Color), typeof(UControl), new PropertyMetadata(Colors.DeepSkyBlue, new PropertyChangedCallback(ThemeColor_Changed)));
         bool isLeftMouseDown;
 
+        public UControl()
+        {
+            this.MouseLeftButtonDown += UControl_MouseLeftButtonDown;
+            this.MouseLeave += UControl_MouseLeave;
+            this.MouseLeftButtonUp += UControl_MouseLeftButtonUp;
+        }
+
         public ControlStyle ControlStyle
         {
             get { return (ControlStyle)GetValue(ControlStyleProperty); }
@@ -64,15 +71,15 @@ namespace User.UI
         protected virtual void OnControlStyleChanged() { }
         protected virtual void OnHighLightChanged() { }
         protected virtual void OnThemeColor() { }
-        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+        private void UControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             isLeftMouseDown = true;
         }
-        protected override void OnMouseLeave(MouseEventArgs e)
+        private void UControl_MouseLeave(object sender, MouseEventArgs e)
         {
             isLeftMouseDown = false;
         }
-        protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
+        private void UControl_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             if (isLeftMouseDown)
             {

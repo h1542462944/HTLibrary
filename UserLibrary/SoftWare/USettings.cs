@@ -139,6 +139,10 @@ namespace User.SoftWare
                 return new USettingsProperty<T>(this, name);
             }
         }
+        public static USettingsProperty<T> Register<T>(USettings uSettings, string name, T value)
+        {
+            return uSettings.Register(name, value);
+        }
 
         /// <summary>
         /// 通过设置的键来查询设置值.
@@ -525,7 +529,6 @@ namespace User.SoftWare
         /// </summary>
         public bool IsNewest => OldValue == null;
     }
-
 
     public sealed class USettingsKey:IEquatable<USettingsKey>,IEquatable<USettingsProperty>
     {

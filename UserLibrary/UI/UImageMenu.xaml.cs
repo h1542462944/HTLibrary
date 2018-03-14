@@ -75,7 +75,6 @@ namespace User.UI
         }
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
-            base.OnMouseDown(e);
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 BdrBack.Visibility = Visibility.Visible;
@@ -83,18 +82,15 @@ namespace User.UI
         }
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            base.OnMouseMove(e);
             Border1.Visibility = Visibility.Visible;
         }
         protected override void OnMouseLeave(MouseEventArgs e)
         {
-            base.OnMouseLeave(e);
             Border1.Visibility = Visibility.Collapsed;
             BdrBack.Visibility = Visibility.Collapsed;
         }
         protected override void OnMouseUp(MouseButtonEventArgs e)
         {
-            base.OnMouseUp(e);
             BdrBack.Visibility = Visibility.Collapsed;
         }
 
