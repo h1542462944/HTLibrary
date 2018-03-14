@@ -32,7 +32,7 @@ namespace User.SoftWare
     /// <summary>
     /// 标准的USettings[版本:1.0.3.0],支持数组.
     /// </summary>
-    public sealed class USettings:XmlBase
+    public sealed class USettings : XmlBase
     {
         /// <summary>
         /// 依赖的单个设置数据对象.
@@ -43,18 +43,21 @@ namespace User.SoftWare
             object value;
             Type type;
             bool isLoaded;
+            bool isEvent;
 
-            public USettingInfo(string name, object value, Type type)
+            public USettingInfo(string name, object value, Type type, bool isEvent)
             {
                 this.name = name;
                 this.value = value;
                 this.type = type;
+                this.isEvent = isEvent;
             }
 
             public string Name { get => name; }
             public object Value { get => value; }
             public Type Type { get => type; }
             internal bool IsLoaded { get => isLoaded; }
+            internal bool IsEvent { get => isEvent; }
 
             public void Replace(object value)
             {
@@ -126,7 +129,7 @@ namespace User.SoftWare
         /// <param name="name">设置的名称.</param>
         /// <param name="value">设置的值.</param>
         /// <returns></returns>
-        public USettingsProperty<T> Register<T>(string name, T value)
+        public USettingsProperty<T> Register<T>(string name, T value, bool isEvent = false)
         {
             if (content.TryGetValue(name, out USettingInfo arg))
             {
@@ -134,14 +137,10 @@ namespace User.SoftWare
             }
             else
             {
-                content.Add(name, new USettingInfo(name, value, value.GetType()));
-                contentdefault.Add(name, new USettingInfo(name, value, value.GetType()));
+                content.Add(name, new USettingInfo(name, value, value.GetType(), isEvent));
+                contentdefault.Add(name, new USettingInfo(name, value, value.GetType(), isEvent));
                 return new USettingsProperty<T>(this, name);
             }
-        }
-        public static USettingsProperty<T> Register<T>(USettings uSettings, string name, T value)
-        {
-            return uSettings.Register(name, value);
         }
 
         /// <summary>
@@ -160,7 +159,10 @@ namespace User.SoftWare
                         var oldvalue = arg.Value;
                         var value = GetValue(arg);
                         arg.Replace(value);
-                        USettingsChanged?.Invoke(new USettingsKey(this,name), new PropertyChangedEventargs(oldvalue, value));
+                        if (arg.IsEvent)
+                        {
+                            USettingsChanged?.Invoke(new USettingsProperty(this, name), new PropertyChangedEventargs(oldvalue, value));
+                        }
                         return value;
                     }
                     else
@@ -181,7 +183,13 @@ namespace User.SoftWare
                     object oldvalue = arg.Value;
                     arg.Replace(value);
                     SetValue(arg);
-                    USettingsChanged?.Invoke(new USettingsKey(this,name), new PropertyChangedEventargs(oldvalue, value));
+                    if (oldvalue != value)
+                    {
+                        if (arg.IsEvent)
+                        {
+                            USettingsChanged?.Invoke(new USettingsProperty(this, name), new PropertyChangedEventargs(oldvalue, value));
+                        }
+                    }
                 }
                 else
                 {
@@ -211,14 +219,14 @@ namespace User.SoftWare
             }
             if (!writeinfile)
             {
-                CreateXml(); 
+                CreateXml();
             }
         }
         /// <summary>
         /// 对已注册的设置的某一项设置进行初始化,并写入文件,将触发[USettingsChanged⚡].
         /// </summary>
         /// <param name="name">设置的键</param>
-        internal void ReSet(string name,bool writeinfile = false)
+        internal void ReSet(string name, bool writeinfile = false)
         {
             this[name] = contentdefault[name].Value;
             if (!writeinfile)
@@ -279,7 +287,7 @@ namespace User.SoftWare
                 }
                 catch (Exception)
                 { }
-                Task.Run(() => 
+                Task.Run(() =>
                 {
                     XDocument xDocument = null;
                     bool isreaded = false;
@@ -427,7 +435,7 @@ namespace User.SoftWare
                 }
                 return t.USettingsConvertArray(list.ToArray());
             }
-            else if(IsDefaultConvert(type))
+            else if (IsDefaultConvert(type))
             {
                 return Transfer(content.Value, type);
             }
@@ -500,13 +508,30 @@ namespace User.SoftWare
     /// <summary>
     /// 设置改变或初始化加载时触发的事件数据.
     /// </summary>
-    public sealed class PropertyChangedEventargs : PropertyChangedEventargs<object>
+    public sealed class PropertyChangedEventargs : EventArgs
     {
-        public PropertyChangedEventargs(object oldValue, object newValue) : base(oldValue, newValue)
+        object oldValue;
+        object newValue;
+
+        public PropertyChangedEventargs(object oldValue, object newValue)
         {
+            this.oldValue = oldValue;
+            this.newValue = newValue;
         }
+        /// <summary>
+        /// 设置改变前的值.
+        /// </summary>
+        public object OldValue => oldValue;
+        /// <summary>
+        /// 设置改变后的值.
+        /// </summary>
+        public object NewValue => newValue;
+        /// <summary>
+        ///是否是初始化的设置.
+        /// </summary>
+        public bool IsNewest => OldValue == null;
     }
-    public class PropertyChangedEventargs<TValue>:EventArgs
+    public sealed class PropertyChangedEventargs<TValue> : EventArgs
     {
         TValue oldValue;
         TValue newValue;
@@ -528,70 +553,14 @@ namespace User.SoftWare
         ///是否是初始化的设置.
         /// </summary>
         public bool IsNewest => OldValue == null;
+
+        public static implicit operator PropertyChangedEventargs(PropertyChangedEventargs<TValue> arg)
+        {
+            return new PropertyChangedEventargs(arg.oldValue, arg.newValue);
+        }
     }
 
-    public sealed class USettingsKey:IEquatable<USettingsKey>,IEquatable<USettingsProperty>
-    {
-        internal USettings linkuSettings;
-        string name;
-
-        internal USettingsKey(USettings linkuSettings, string name)
-        {
-            this.linkuSettings = linkuSettings;
-            this.name = name;
-        }
-
-        public string Name { get => name;  }
-
-        public bool Equals(USettingsProperty other)
-        {
-            return (linkuSettings == other.linkuSettings && name == other.Name);
-     
-        }
-        public bool Equals(USettingsKey other)
-        {
-            return linkuSettings == other.linkuSettings && name == other.name;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj.GetType() == typeof(USettingsKey))
-            {
-                return this == (USettingsKey)obj;
-            }
-            else if (obj.GetType() == typeof(USettingsProperty))
-            {
-                return this == (USettingsProperty)obj;
-            }
-            else if (obj.GetType() == typeof(USettingsProperty))
-            {
-                return obj.Equals(this);
-            }
-            else { return false; }
-        }
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-
-        public static bool operator ==(USettingsKey v1, USettingsProperty v2)
-        {
-            return v1.Equals(v2);
-        }
-        public static bool operator !=(USettingsKey v1, USettingsProperty v2)
-        {
-            return !(v1 == v2);
-        }
-        public static bool operator ==(USettingsKey v1, USettingsKey v2)
-        {
-            return v1.Equals(v2);
-        }
-        public static bool operator !=(USettingsKey v1, USettingsKey v2)
-        {
-            return !(v1 == v2);
-        }
-    }
-    public sealed class USettingsProperty:IEquatable<USettingsKey>, IEquatable<USettingsProperty>
+    public sealed class USettingsProperty : IEquatable<USettingsProperty>
     {
         internal USettings linkuSettings;
         string name;
@@ -605,7 +574,7 @@ namespace User.SoftWare
         /// <summary>
         /// 设置的名称.
         /// </summary>
-        public string Name { get => name;  }
+        public string Name { get => name; }
         /// <summary>
         /// 设置的值.
         /// </summary>
@@ -623,19 +592,6 @@ namespace User.SoftWare
         {
             return linkuSettings == other.linkuSettings && name == other.name;
         }
-        public bool Equals(USettingsKey other)
-        {
-            return this.linkuSettings == other.linkuSettings && name == other.Name;
-        }
-
-        public static bool operator ==(USettingsProperty v2, USettingsKey v1)
-        {
-            return v2.Equals(v1);
-        }
-        public static bool operator !=(USettingsProperty v2, USettingsKey v1)
-        {
-            return !(v2 == v1);
-        }
         public static bool operator ==(USettingsProperty v1, USettingsProperty v2)
         {
             return v1.Equals(v2);
@@ -647,26 +603,29 @@ namespace User.SoftWare
 
         public override bool Equals(object obj)
         {
-            if (obj.GetType() == typeof(USettingsKey))
+            try
             {
-                return this == (USettingsKey)obj;
+                USettingsProperty arg = (USettingsProperty)obj;
+                if (this.Equals(arg))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
-            else if (obj.GetType() == typeof(USettingsProperty))
+            catch (Exception)
             {
-                return this == (USettingsProperty)obj;
+                return false;
             }
-            else if (obj.GetType() == typeof(USettingsProperty<>))
-            {
-                return obj.Equals(this);
-            }
-            else { return false; }
         }
         public override int GetHashCode()
         {
             return base.GetHashCode();
         }
     }
-    public sealed class USettingsProperty<T> : IEquatable<USettingsKey>,IEquatable<USettingsProperty>,IEquatable<USettingsProperty<T>> 
+    public sealed class USettingsProperty<T>
     {
         internal USettings linkuSettings;
         string name;
@@ -694,78 +653,9 @@ namespace User.SoftWare
             Value = Value;
         }
 
-        public  bool Equals(USettingsKey other)
+        public static implicit operator USettingsProperty(USettingsProperty<T> arg)
         {
-            return this.linkuSettings == other.linkuSettings && name == other.Name;
-        }
-        public bool Equals(USettingsProperty other)
-        {
-            return this.linkuSettings == other.linkuSettings && name == other.Name;
-        }
-        public bool Equals(USettingsProperty<T> other)
-        {
-            return this.linkuSettings == other.linkuSettings && name == other.Name;
-        }
-        public static bool operator ==(USettingsProperty<T> v2, USettingsKey v1)
-        {
-            return v2.Equals(v1);
-        }
-        public static bool operator !=(USettingsProperty<T> v2, USettingsKey v1)
-        {
-            return !(v2 == v1);
-        }
-        public static bool operator ==(USettingsProperty<T> v2, USettingsProperty v1)
-        {
-            return v2.Equals(v1);
-        }
-        public static bool operator !=(USettingsProperty<T> v2, USettingsProperty v1)
-        {
-            return !(v2 == v1);
-        }
-        public static bool operator ==( USettingsKey v1, USettingsProperty<T> v2)
-        {
-            return v2.Equals(v1);
-        }
-        public static bool operator !=( USettingsKey v1, USettingsProperty<T> v2)
-        {
-            return !(v2 == v1);
-        }
-        public static bool operator ==( USettingsProperty v1,USettingsProperty<T> v2)
-        {
-            return v2.Equals(v1);
-        }
-        public static bool operator !=( USettingsProperty v1, USettingsProperty<T> v2)
-        {
-            return !(v2 == v1);
-        }
-        public static bool operator ==(USettingsProperty<T> v2, USettingsProperty<T> v1)
-        {
-            return v2.Equals(v1);
-        }
-        public static bool operator !=(USettingsProperty<T> v2, USettingsProperty<T> v1)
-        {
-            return !(v2 == v1);
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj.GetType() == typeof(USettingsKey))
-            {
-                return this == (USettingsKey)obj;
-            }
-            else if (obj.GetType() == typeof(USettingsProperty))
-            {
-                return this == (USettingsProperty)obj;
-            }
-            else if (obj.GetType() == typeof(USettingsProperty<T>))
-            {
-                return this == (USettingsProperty<T>)obj;
-            }
-            else { return false; }
-        }
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
+            return new USettingsProperty(arg.linkuSettings, arg.name);
         }
     }
 
@@ -791,6 +681,6 @@ namespace User.SoftWare
         }
 
     }
-    public delegate void USettingsChangedEventHander(USettingsKey key, PropertyChangedEventargs e);
+    public delegate void USettingsChangedEventHander(USettingsProperty key, PropertyChangedEventargs e);
     public delegate void PropertyChangedEventHander<TValue>(object sender, PropertyChangedEventargs<TValue> e);
 }

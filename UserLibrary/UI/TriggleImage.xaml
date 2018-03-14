@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="40" d:DesignWidth="40">
     <Grid x:Name="GridMain" Background="Transparent" RenderTransformOrigin="0.5,0.5">
-        <Border x:Name="BdrBack" Background="White" Visibility="Visible"/>
+        <Border x:Name="BdrBack" Visibility="Visible"/>
         <Image x:Name="Img"/>
         <Border x:Name="BdrHighlight" BorderThickness="3" BorderBrush="White" Visibility="Hidden"/>
         <Border x:Name="Bdr" BorderThickness="3" BorderBrush="#99FFFFFF" Visibility="Hidden"/>

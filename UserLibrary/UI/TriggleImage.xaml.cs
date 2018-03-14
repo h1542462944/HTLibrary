@@ -23,7 +23,17 @@ namespace User.UI
         public TriggerImage()
         {
             InitializeComponent();
+            this.Tapped += TriggerImage_Tapped;
         }
+
+        private void TriggerImage_Tapped(object sender, RoutedEventArgs e)
+        {
+            if (CanAutoCheck)
+            {
+                IsChecked = !IsChecked;
+            }
+        }
+
         public ImageSource ImageSourceChecked
         {
             get => (ImageSource)GetValue(ImageSourceCheckedProperty);
@@ -119,13 +129,6 @@ namespace User.UI
         protected override void OnMouseLeave(MouseEventArgs e)
         {
             this.Bdr.Visibility = Visibility.Hidden;
-        }
-        protected override void OnMouseUp(MouseButtonEventArgs e)
-        {
-            if (CanAutoCheck && e.ChangedButton == MouseButton.Left)
-            {
-                IsChecked = !IsChecked;
-            }
         }
     }
 }
