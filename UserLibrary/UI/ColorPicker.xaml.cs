@@ -146,6 +146,21 @@ namespace User.UI
             BdrColorCurrent.Background = new SolidColorBrush(color);
             ValueChanged?.Invoke(this, new PropertyChangedEventargs<ColorP>(ColorP.Empty, Value));
         }
+        protected override void OnControlStyleChanged()
+        {
+            if (ControlStyle == ControlStyle.Transparent)
+            {
+                GridMain.Background = Brushes.Transparent;
+            }
+            else if (ControlStyle == ControlStyle.Light)
+            {
+                GridMain.Background = ControlBase.DWhiteBrush;
+            }
+            else
+            {
+                GridMain.Background = ControlBase.DBlackBrush;
+            }
+        }
 
         private static void Value_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -193,7 +208,7 @@ namespace User.UI
             {
                 Elp.Stroke = Brushes.White;
             }
-            Size size = new Size(this.Width - 50, this.Height - 100);
+            Size size = new Size(this.ActualWidth - 50, this.ActualHeight - 100);
             Elp.Margin = new Thickness(5 + Value.Location.X / 6 * size.Width, 5 + Value.Location.Y * size.Height, 0, 0);
         }
         private void Draw()

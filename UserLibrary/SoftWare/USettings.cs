@@ -183,12 +183,9 @@ namespace User.SoftWare
                     object oldvalue = arg.Value;
                     arg.Replace(value);
                     SetValue(arg);
-                    if (oldvalue != value)
+                    if (arg.IsEvent)
                     {
-                        if (arg.IsEvent)
-                        {
-                            USettingsChanged?.Invoke(new USettingsProperty(this, name), new PropertyChangedEventargs(oldvalue, value));
-                        }
+                        USettingsChanged?.Invoke(new USettingsProperty(this, name), new PropertyChangedEventargs(oldvalue, value));
                     }
                 }
                 else

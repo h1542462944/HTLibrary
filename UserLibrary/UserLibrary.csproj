@@ -69,6 +69,7 @@
     <Compile Include="UI\ControlBase.cs" />
     <Compile Include="UI\DragWindow.cs" />
     <Compile Include="UI\ImagePicker.cs" />
+    <Compile Include="UI\Inventory.cs" />
     <Compile Include="UI\PageNavigationHelper.cs" />
     <Compile Include="UI\SlideBar.xaml.cs">
       <DependentUpon>SlideBar.xaml</DependentUpon>
