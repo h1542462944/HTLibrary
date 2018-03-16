@@ -129,7 +129,7 @@
                     <ColumnDefinition Width="4*"/>
                     <ColumnDefinition Width="6*"/>
                 </Grid.ColumnDefinitions>
-                <Label Content="A" Foreground="White" HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" Margin="0,-2,0,0"/>
+                <Label  Content="A" Foreground="White" HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" Margin="0,-2,0,0"/>
                 <TextBox x:Name="TbxA" Grid.Column="1" Text="255" Foreground="White" Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="2,0,2,1"/>
             </Grid>
             <Grid Grid.Column="1">
@@ -163,8 +163,8 @@
                 <ColumnDefinition Width="4*"/>
                 <ColumnDefinition Width="4*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="确认" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" MouseUp="TbxOk_MouseUp"  />
-            <TextBlock Text="取消" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" MouseUp="TbxCancel_MouseUp" />
+            <TextBlock x:Name="TbxOk" Text="确认" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" MouseUp="TbxOk_MouseUp"  />
+            <TextBlock x:Name="TbxCancel" Text="取消" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" MouseUp="TbxCancel_MouseUp" />
         </Grid>
     </Grid>
 </local:UControl>

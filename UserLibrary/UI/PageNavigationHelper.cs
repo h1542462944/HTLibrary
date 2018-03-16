@@ -9,11 +9,11 @@ namespace User.UI
 {
     public sealed class PageNavigationHelper
     {
-        List<Page> pages = new List<Page>();
+        List<Type> pages = new List<Type>();
         public PageNavigationHelper()
         {
         }
-        public void Add(Page page)
+        public void Add(Type page)
         {
             pages.Add(page);
             PageChanged?.Invoke(this, new PageNavigationEventargs(pages.Count == 1, page));
@@ -27,21 +27,21 @@ namespace User.UI
             }
         }
         public event PageNavigationEventHandler PageChanged;
-        public IReadOnlyList<Page> Pages => pages;
+        public IReadOnlyList<Type> Pages => pages;
     }
     public sealed class PageNavigationEventargs : EventArgs
     {
         bool isFirstPage;
-        Page page;
+        Type page;
 
-        public PageNavigationEventargs(bool isFirstPage, Page page)
+        public PageNavigationEventargs(bool isFirstPage, Type page)
         {
             this.isFirstPage = isFirstPage;
             this.page = page;
         }
 
         public bool IsFirstPage { get => isFirstPage; }
-        public Page Page { get => page; }
+        public Type Page { get => page; }
     }
     public delegate void PageNavigationEventHandler(object sender, PageNavigationEventargs e);
 }

@@ -61,7 +61,6 @@ namespace User.UI
             }
         }
         private bool isLeftMouseDown = false;
-        private ColorP valueOld = new ColorP(new Point(), 255, 255);
         private TextBox[] tbx = new TextBox[4];
         private bool[] tbxfocus = new bool[4];
         public ColorP Value
@@ -69,8 +68,15 @@ namespace User.UI
             get { return (ColorP)GetValue(ValueProperty); }
             set { SetValue(ValueProperty, value); }
         }
+        public ColorP ValueOld
+        {
+            get { return (ColorP)GetValue(ValueOldProperty); }
+            set { SetValue(ValueOldProperty, value); }
+        }
         public static readonly DependencyProperty ValueProperty =
             DependencyProperty.Register("Value", typeof(ColorP), typeof(ColorPicker), new PropertyMetadata(new ColorP(Colors.Red), new PropertyChangedCallback(Value_Changed)));
+        public static readonly DependencyProperty ValueOldProperty =
+            DependencyProperty.Register("ValueOld", typeof(ColorP), typeof(ColorPicker), new PropertyMetadata(new ColorP(Colors.Red), new PropertyChangedCallback(ValueOld_Changed)));
         public event PropertyChangedEventHander<ColorP> ChooseOkOrCancel;
         public event PropertyChangedEventHander<ColorP> ValueChanged;
 
@@ -109,14 +115,14 @@ namespace User.UI
         {
             if (e.ChangedButton == MouseButton.Left)
             {
-                SetColorNew(); 
+                SetColorNew(false); 
             }
         }
         private void BdrColorOld_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            if (    e.ChangedButton ==  MouseButton.Left)
+            if (e.ChangedButton ==  MouseButton.Left)
             {
-                SetColorOld(); 
+                SetColorOld(false); 
             }
         }
         private void TbxOk_MouseUp(object sender, MouseButtonEventArgs e)
@@ -146,26 +152,45 @@ namespace User.UI
             BdrColorCurrent.Background = new SolidColorBrush(color);
             ValueChanged?.Invoke(this, new PropertyChangedEventargs<ColorP>(ColorP.Empty, Value));
         }
+        void OnValueOldChanged()
+        {
+            BdrColorOld.Background = new SolidColorBrush((Color)ValueOld);
+        }
         protected override void OnControlStyleChanged()
         {
             if (ControlStyle == ControlStyle.Transparent)
             {
                 GridMain.Background = Brushes.Transparent;
+                TbxA.Foreground = Brushes.White; TbxR.Foreground = Brushes.White;
+                TbxG.Foreground = Brushes.White; TbxB.Foreground = Brushes.White;
+                TbxOk.Foreground = Brushes.White; TbxCancel.Foreground = Brushes.White;
             }
             else if (ControlStyle == ControlStyle.Light)
             {
                 GridMain.Background = ControlBase.DWhiteBrush;
+                TbxA.Foreground = Brushes.Black;TbxR.Foreground = Brushes.Black;
+                TbxG.Foreground = Brushes.Black;TbxB.Foreground = Brushes.Black;
+                TbxOk.Foreground = Brushes.Black; TbxCancel.Foreground = Brushes.Black;
             }
             else
             {
                 GridMain.Background = ControlBase.DBlackBrush;
+                TbxA.Foreground = Brushes.White; TbxR.Foreground = Brushes.White;
+                TbxG.Foreground = Brushes.White; TbxB.Foreground = Brushes.White;
+                TbxOk.Foreground = Brushes.White; TbxCancel.Foreground = Brushes.White;
             }
+            SlideBarA.ControlStyle = ControlStyle;
+            SlideBarL.ControlStyle = ControlStyle;
         }
 
         private static void Value_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             ColorPicker arg = (ColorPicker)d;
             arg.OnValueChanged();
+        }
+        private static void ValueOld_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((ColorPicker)d).OnValueOldChanged();
         }
 
         private void DrawSquare()
@@ -243,18 +268,22 @@ namespace User.UI
             SlideBarA.SlideBrush = brush2;
             SlideBarA.SlideValue = Value.Alpha;
         }
-        private void SetColorNew()
+        private void SetColorNew(bool isEvent = true)
         {
-            ChooseOkOrCancel?.Invoke(this, new PropertyChangedEventargs<ColorP>(valueOld, Value));
-            BdrColorOld.Background = BdrColorCurrent.Background.Clone();
-            valueOld = Value;
+            if (isEvent)
+            {
+                ChooseOkOrCancel?.Invoke(this, new PropertyChangedEventargs<ColorP>(ValueOld, Value));
+            }
+            ValueOld = Value;
         }
-        private void SetColorOld()
+        private void SetColorOld(bool isEvent = true)
         {
-            ChooseOkOrCancel?.Invoke(this, new PropertyChangedEventargs<ColorP>(Value, valueOld));
+            if (isEvent)
+            {
+                ChooseOkOrCancel?.Invoke(this, new PropertyChangedEventargs<ColorP>(Value, ValueOld));
+            }
             BdrColorCurrent.Background = BdrColorOld.Background.Clone();
-            Value = valueOld;
+            Value = ValueOld;
         }
-
     }
 }
