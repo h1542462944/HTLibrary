@@ -25,12 +25,27 @@ namespace User.UI
 
     public class ControlBase
     {
-        public static Brush UWhiteBrush = new SolidColorBrush(Color.FromArgb(102, 255, 255, 255));
-        public static Brush UBlackBrush = new SolidColorBrush(Color.FromArgb(102, 0, 0, 0));
-        public static Brush DWhiteBrush = new SolidColorBrush(Color.FromArgb(204, 255, 255, 255));
-        public static Brush DBlackBrush = new SolidColorBrush(Color.FromArgb(204, 0, 0, 0));
-
-
+        /// <summary>
+        /// 颜色为66FFFFFF的纯色笔刷.
+        /// </summary>
+        public static readonly Brush UWhiteBrush = new SolidColorBrush(Color.FromArgb(102, 255, 255, 255));
+        public static readonly Brush UBlackBrush = new SolidColorBrush(Color.FromArgb(102, 0, 0, 0));
+        /// <summary>
+        /// 颜色为#CCFFFFFF的纯色笔刷.
+        /// </summary>
+        public static readonly Brush DWhiteBrush = new SolidColorBrush(Color.FromArgb(204, 255, 255, 255));
+        /// <summary>
+        /// 颜色为#CC000000的纯色笔刷.
+        /// </summary>
+        public static readonly Brush DBlackBrush = new SolidColorBrush(Color.FromArgb(204, 0, 0, 0));
+        /// <summary>
+        /// 颜色为#CC333333的纯色笔刷.
+        /// </summary>
+        public static readonly Brush DeepGrayBrush = new SolidColorBrush(Color.FromArgb(204, 51, 51, 51));
+        /// <summary>
+        /// 颜色为#CCCCCCCC的笔刷.
+        /// </summary>
+        public static readonly Brush LightGrayBrush = new SolidColorBrush(Color.FromArgb(204, 204, 204, 204));
     }
     /// <summary>
     /// 为用户控件提供统一的内容模型.

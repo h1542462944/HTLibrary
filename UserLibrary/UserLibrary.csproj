@@ -71,14 +71,17 @@
     <Compile Include="UI\ImagePicker.cs" />
     <Compile Include="UI\Inventory.cs" />
     <Compile Include="UI\PageNavigationHelper.cs" />
+    <Compile Include="UI\QuickButton.xaml.cs">
+      <DependentUpon>QuickButton.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\SlideBar.xaml.cs">
       <DependentUpon>SlideBar.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\TriggerSwitch.xaml.cs">
       <DependentUpon>TriggerSwitch.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\TriggleImage.xaml.cs">
-      <DependentUpon>TriggleImage.xaml</DependentUpon>
+    <Compile Include="UI\TriggerImage.xaml.cs">
+      <DependentUpon>TriggerImage.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\UImageMenu.xaml.cs">
       <DependentUpon>UImageMenu.xaml</DependentUpon>
@@ -93,6 +96,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UI\QuickButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\SlideBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -101,7 +108,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\TriggleImage.xaml">
+    <Page Include="UI\TriggerImage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -270,20 +270,19 @@ namespace User.UI
         }
         private void SetColorNew(bool isEvent = true)
         {
+            ValueOld = Value;
             if (isEvent)
             {
                 ChooseOkOrCancel?.Invoke(this, new PropertyChangedEventargs<ColorP>(ValueOld, Value));
             }
-            ValueOld = Value;
         }
         private void SetColorOld(bool isEvent = true)
         {
+            Value = ValueOld;
             if (isEvent)
             {
                 ChooseOkOrCancel?.Invoke(this, new PropertyChangedEventargs<ColorP>(Value, ValueOld));
             }
-            BdrColorCurrent.Background = BdrColorOld.Background.Clone();
-            Value = ValueOld;
         }
     }
 }
