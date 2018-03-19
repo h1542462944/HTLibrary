@@ -49,6 +49,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="IO\SyncDir.cs" />
+    <Compile Include="IO\UsbCopyer.cs" />
+    <Compile Include="IO\UserIO.cs" />
     <Compile Include="Math\Virtualnumber.cs" />
     <Compile Include="NetWork\NetWorkAdapter.cs" />
     <Compile Include="NetWork\NetWorkMonitor.cs" />
@@ -68,6 +71,7 @@
     </Compile>
     <Compile Include="UI\ControlBase.cs" />
     <Compile Include="UI\DragWindow.cs" />
+    <Compile Include="Windows\HotKey.cs" />
     <Compile Include="Windows\ImagePicker.cs" />
     <Compile Include="UI\Inventory.cs" />
     <Compile Include="UI\PageNavigationHelper.cs" />
@@ -86,6 +90,7 @@
     <Compile Include="UI\UImageMenu.xaml.cs">
       <DependentUpon>UImageMenu.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\KeyboardHook.cs" />
     <Compile Include="Windows\Win32API.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -118,8 +123,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="IO\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

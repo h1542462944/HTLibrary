@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace User.Windows
 {
-    public static class Win32API
+    public partial class Win32API
     {
         [System.Runtime.InteropServices.DllImport("User32.dll")]
         static extern bool ShowWindowAsync(IntPtr hWnd, int cmdShow);

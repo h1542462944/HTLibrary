@@ -15,6 +15,9 @@ using System.ComponentModel;
 
 namespace User.Windows
 {
+    /// <summary>
+    /// 屏幕检测的数据,扩展自Rect.
+    /// </summary>
     public struct ScreenMonitorAna
     {
         Rect area;
@@ -41,6 +44,9 @@ namespace User.Windows
         public int Ynum { get => ynum; set => ynum = value; }
         public int Middlevalue { get => middleColorValue; set => middleColorValue = value; }
     }
+    /// <summary>
+    /// 表示一个屏幕检测的对象,用于监视 System.Windows.Window 的背景是亮的还是暗的.
+    /// </summary>
     public class ScreenMonitor
     {
         private DispatcherTimer innertimer = new DispatcherTimer()
@@ -235,6 +241,9 @@ namespace User.Windows
             return result.ToArray();
         }
     }
+    /// <summary>
+    /// 屏幕检测的单个属性,只能由 ScreenMonitor 注册而来.
+    /// </summary>
     public class ScreenMonitorProperty:System.ComponentModel.INotifyPropertyChanged
     {
         bool? isRelativeDark = null;
@@ -261,11 +270,14 @@ namespace User.Windows
         public event EventHandler<IsRelativeDarkChangedEventargs> IsRelativeDarkChanged;
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public ScreenMonitorProperty(Window window)
+        internal ScreenMonitorProperty(Window window)
         {
             this.window = window;
         }
     }
+    /// <summary>
+    /// 当背景的亮色或暗色发生改变时触发的数据.
+    /// </summary>
     public class IsRelativeDarkChangedEventargs
     {
         Window window;
@@ -276,8 +288,13 @@ namespace User.Windows
             this.window = window;
             this.isRelativeDark = isRelativeDark;
         }
-
+        /// <summary>
+        /// 检测的窗体引用.
+        /// </summary>
         public Window Window => window;
+        /// <summary>
+        /// 是否是相对暗的.
+        /// </summary>
         public bool IsRelativeDark => isRelativeDark;
     }
 
