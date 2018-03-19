@@ -3,12 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2020
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserLibrary", "UserLibrary\UserLibrary.csproj", "{477A7B58-65D7-4F0B-A813-D5AC344979A5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HTLibrary", "HTLibrary\HTLibrary.csproj", "{477A7B58-65D7-4F0B-A813-D5AC344979A5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "help", "help", "{4B1379B9-465F-496A-A9B1-1C3BD3549046}"
 	ProjectSection(SolutionItems) = preProject
-		UserLibrary\runindex.xml = UserLibrary\runindex.xml
-		UserLibrary\struct.xml = UserLibrary\struct.xml
+		HTLibrary\runindex.xml = HTLibrary\runindex.xml
+		HTLibrary\struct.xml = HTLibrary\struct.xml
 		XMLFile1.xml = XMLFile1.xml
 	EndProjectSection
 EndProject

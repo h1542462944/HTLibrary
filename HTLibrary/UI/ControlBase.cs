@@ -57,7 +57,7 @@ namespace User.UI
         public static readonly DependencyProperty IsHighLightProperty =
            DependencyProperty.Register("IsHighLight", typeof(bool), typeof(UControl), new PropertyMetadata(false, new PropertyChangedCallback(IsHighLight_Changed)));
         public static readonly DependencyProperty ThemeColorProperty =
-           DependencyProperty.Register("ThemeColor", typeof(Color), typeof(UControl), new PropertyMetadata(Colors.DeepSkyBlue, new PropertyChangedCallback(ThemeColor_Changed)));
+           DependencyProperty.Register("ThemeColor", typeof(Color), typeof(UControl), new PropertyMetadata(Color.FromRgb(0x1b,0x97,0x73), new PropertyChangedCallback(ThemeColor_Changed)));
         bool isLeftMouseDown;
 
         public UControl()

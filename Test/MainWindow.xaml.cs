@@ -26,13 +26,13 @@ namespace Test
     /// </summary>
     public partial class MainWindow : Window
     {
-        Area area = new Area();
         public MainWindow()
         {
             InitializeComponent();
             Loaded += MainWindow_Loaded;
-            area.uSettings.USettingsChanged += USettings_USettingsChanged;
-            area.Flush();
+            Area.uSettings.USettingsChanged += USettings_USettingsChanged;
+            Area.Flush();
+            Area.uSettings.ReSet(true);
         }
 
         private void USettings_USettingsChanged(USettingsProperty key, PropertyChangedEventargs e)
@@ -60,22 +60,9 @@ namespace Test
 
     public class Area
     {
-        public USettings uSettings = new USettings(AppDomain.CurrentDomain.BaseDirectory, "r");
-        public USettingsProperty<Point> E2Property;
-        public USettingsProperty<Size> S2Property;
-        public USettingsProperty<Point> E1Property;
-        public USettingsProperty<Size> S1Property;
-        public USettingsProperty<Point> E4Property;
-        public USettingsProperty<Size> S4Property;
-        public USettingsProperty<Point> E5Property;
-        public USettingsProperty<Size> S5Property;
-        public USettingsProperty<Point> E6Property;
-        public Area()
-        {
-            E2Property = uSettings.Register("E2", new Point(5, 7));
-            S2Property = uSettings.Register("S2", new Size(4, 8));
-        }
-        public void Flush()
+        public static USettings uSettings = new USettings(AppDomain.CurrentDomain.BaseDirectory, "r",true);
+        public static USettingsProperty<string> LabelTextProperty = uSettings.Register("LabelText","长",true);
+        public static void Flush()
         {
             uSettings.Flush();
         }

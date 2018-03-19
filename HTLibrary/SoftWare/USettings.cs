@@ -8,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-
 namespace User.SoftWare
 {
     /// <summary>
@@ -28,12 +27,35 @@ namespace User.SoftWare
         dynamic USettingsConvert(string content);
         string ToString();
     }
-
     /// <summary>
     /// 标准的USettings[版本:1.0.3.0],支持数组.
     /// </summary>
     public sealed class USettings : XmlBase
     {
+        /// <summary>
+        /// 支持转换的类型, 0:可以直接转换,1:需要借助Parse,2:需要自定义转换方法,3:使用ISettingsConvert接口.
+        /// </summary>
+        static Dictionary<Type, int> SettingsType = new Dictionary<Type, int>
+        {
+            {typeof(byte),0 },
+            {typeof(sbyte),0},
+            {typeof(short),0 },
+            {typeof(int) ,0},
+            {typeof(long),0},
+            {typeof(ushort),0},
+            {typeof(uint),0 },
+            {typeof(ulong),0},
+            {typeof(float),0 },
+            {typeof(double),0},
+            {typeof(char),0},
+            {typeof(string),0 },
+            {typeof(decimal),0},
+            {typeof(bool),0 },
+            {typeof(DateTime),0},
+            {typeof(System.Windows.Point),1},
+            {typeof(System.Windows.Size),1},
+            {typeof(System.Windows.Media.Color),2}
+        };
         /// <summary>
         /// 依赖的单个设置数据对象.
         /// </summary>
@@ -56,7 +78,7 @@ namespace User.SoftWare
             public string Name { get => name; }
             public object Value { get => value; }
             public Type Type { get => type; }
-            internal bool IsLoaded { get => isLoaded; }
+            internal bool IsLoaded { get => isLoaded; set => isLoaded = value; }
             internal bool IsEvent { get => isEvent; }
 
             public void Replace(object value)
@@ -64,20 +86,37 @@ namespace User.SoftWare
                 this.value = value;
                 this.isLoaded = true;
             }
-            public void SetIsLoaded()
-            {
-                isLoaded = true;
-            }
         }
         /// <summary>
         /// 新建设置实例.
         /// </summary>
         /// <param name="folder">所在的文件夹名称[完全限定名]</param>
         /// <param name="rootName">根命名及文件名</param>
-        public USettings(string folder, string rootName)
+        public USettings(string folder, string rootName,bool isMonitor= false)
         {
             Folder = folder;
             RootName = rootName;
+            IsMonitor = isMonitor;
+            if (IsMonitor && File.Exists(base.FilePath))
+            {
+                //>>>>新建Watcher
+                Watcher = new FileSystemWatcher(Folder, "*.xml");
+                Watcher.Changed += Watcher_Changed;
+                Watcher.EnableRaisingEvents = true;
+            }
+        }
+        private void Watcher_Changed(object sender, FileSystemEventArgs e)
+        {
+            if (e.ChangeType == WatcherChangeTypes.Changed && e.FullPath == FilePath)
+            {
+                //do something.
+                foreach (var v in content.Values)
+                {
+                    v.IsLoaded = false;
+                    //>>>>引发读取操作.
+                    object obj = this[v.Name];
+                }
+            }
         }
         private readonly string filetype = "settings";
         private readonly string comment = "这是设置1.0.3.0版本的本地文件,可以实现改变字段值自动保存的功能,支持保存数组.";
@@ -86,6 +125,8 @@ namespace User.SoftWare
         protected override string Comment => comment;
         protected override string FileType => filetype;
         protected override string FileVersion => "1.0.3.0";
+        FileSystemWatcher Watcher { get; set; }
+        bool IsMonitor { get; set; }
         /// <summary>
         /// 设置的集合.
         /// </summary>
@@ -167,7 +208,7 @@ namespace User.SoftWare
                     }
                     else
                     {
-                        arg.SetIsLoaded();
+                        arg.IsLoaded = true;
                         return arg.Value;
                     }
                 }
@@ -178,6 +219,10 @@ namespace User.SoftWare
             }
             set
             {
+                if (Watcher !=null)
+                {
+                    Watcher.EnableRaisingEvents = false;
+                }
                 if (content.TryGetValue(name, out USettingInfo arg))
                 {
                     object oldvalue = arg.Value;
@@ -191,6 +236,10 @@ namespace User.SoftWare
                 else
                 {
                     throw new ArgumentNullException();
+                }
+                if (Watcher != null)
+                {
+                    Watcher.EnableRaisingEvents = true;
                 }
             }
         }
@@ -269,6 +318,14 @@ namespace User.SoftWare
             if (!File.Exists(FilePath))
             {
                 CreateXml();
+                //>>>>新建Watcher
+                Watcher = null;
+                if (IsMonitor)
+                {
+                    Watcher = new FileSystemWatcher(Folder, "*.xml");
+                }
+                Watcher.Changed += Watcher_Changed;
+                Watcher.EnableRaisingEvents = true;
                 SetValue(info);
             }
             else
@@ -330,7 +387,7 @@ namespace User.SoftWare
         {
             try
             {
-                if (Tools.SettingsType.TryGetValue(type, out int settingstype))
+                if (SettingsType.TryGetValue(type, out int settingstype))
                 {
                     try
                     {
@@ -379,7 +436,7 @@ namespace User.SoftWare
         }
         private string Transfer(object value, Type type)
         {
-            if (Tools.SettingsType.TryGetValue(type, out int settingstype))
+            if (SettingsType.TryGetValue(type, out int settingstype))
             {
                 string result = "";
                 if (settingstype == 2)
@@ -488,7 +545,7 @@ namespace User.SoftWare
         }
         private bool IsDefaultConvert(Type type)
         {
-            if (Tools.SettingsType.ContainsKey(type))
+            if (SettingsType.ContainsKey(type))
             {
                 return true;
             }
@@ -500,60 +557,6 @@ namespace User.SoftWare
             {
                 return false;
             }
-        }
-    }
-    /// <summary>
-    /// 设置改变或初始化加载时触发的事件数据.
-    /// </summary>
-    public sealed class PropertyChangedEventargs : EventArgs
-    {
-        object oldValue;
-        object newValue;
-
-        public PropertyChangedEventargs(object oldValue, object newValue)
-        {
-            this.oldValue = oldValue;
-            this.newValue = newValue;
-        }
-        /// <summary>
-        /// 设置改变前的值.
-        /// </summary>
-        public object OldValue => oldValue;
-        /// <summary>
-        /// 设置改变后的值.
-        /// </summary>
-        public object NewValue => newValue;
-        /// <summary>
-        ///是否是初始化的设置.
-        /// </summary>
-        public bool IsNewest => OldValue == null;
-    }
-    public sealed class PropertyChangedEventargs<TValue> : EventArgs
-    {
-        TValue oldValue;
-        TValue newValue;
-
-        public PropertyChangedEventargs(TValue oldValue, TValue newValue)
-        {
-            this.oldValue = oldValue;
-            this.newValue = newValue;
-        }
-        /// <summary>
-        /// 设置改变前的值.
-        /// </summary>
-        public TValue OldValue => oldValue;
-        /// <summary>
-        /// 设置改变后的值.
-        /// </summary>
-        public TValue NewValue => newValue;
-        /// <summary>
-        ///是否是初始化的设置.
-        /// </summary>
-        public bool IsNewest => OldValue == null;
-
-        public static implicit operator PropertyChangedEventargs(PropertyChangedEventargs<TValue> arg)
-        {
-            return new PropertyChangedEventargs(arg.oldValue, arg.newValue);
         }
     }
 
@@ -679,5 +682,4 @@ namespace User.SoftWare
 
     }
     public delegate void USettingsChangedEventHander(USettingsProperty key, PropertyChangedEventargs e);
-    public delegate void PropertyChangedEventHander<TValue>(object sender, PropertyChangedEventargs<TValue> e);
 }

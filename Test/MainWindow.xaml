@@ -14,6 +14,7 @@
         <Label x:Name="Lbl1" Content="Label" HorizontalAlignment="Left" Height="30" Margin="251,144,0,0" VerticalAlignment="Top" Width="59"/>
         <libr:ColorPicker x:Name="ColorPicker1" HorizontalAlignment="Left" Height="205" Margin="323,92,0,0" VerticalAlignment="Top" Width="188" />
         <libr:UImageMenu HorizontalAlignment="Left" Height="43" Margin="118,208,0,0" ControlStyle="Light" VerticalAlignment="Top" Width="177" Tapped="UImageMenu_Tapped"/>
-        <libr:QuickButton HorizontalAlignment="Left" Height="77" Margin="273,10,0,0" VerticalAlignment="Top" Width="113" IsChecked="True" ThemeColor="#FF369FA4" />
+        <libr:QuickButton HorizontalAlignment="Left" Height="77" Margin="273,10,0,0" VerticalAlignment="Top" Width="113" IsChecked="True" ThemeColor="#FF1B9773" />
+        <Label x:Name="LblE" Content="Label" HorizontalAlignment="Left" Height="41" Margin="413,38,0,0" VerticalAlignment="Top" Width="85"/>
     </Grid>
 </Window>

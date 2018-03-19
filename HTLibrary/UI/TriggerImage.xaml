@@ -7,9 +7,18 @@
              mc:Ignorable="d" 
              d:DesignHeight="40" d:DesignWidth="40">
     <Grid x:Name="GridMain" Background="Transparent" RenderTransformOrigin="0.5,0.5">
+        <Grid.RenderTransform>
+            <TransformGroup>
+                <ScaleTransform x:Name="Scale" ScaleX="1" ScaleY="1"/>
+                <SkewTransform/>
+                <RotateTransform/>
+                <TranslateTransform/>
+            </TransformGroup>
+        </Grid.RenderTransform>
         <Border x:Name="BdrBack" Visibility="Visible"/>
         <Image x:Name="Img"/>
         <Border x:Name="BdrHighlight" BorderThickness="3" BorderBrush="White" Visibility="Hidden"/>
-        <Border x:Name="Bdr" BorderThickness="3" BorderBrush="#99FFFFFF" Visibility="Hidden"/>
+        <Border x:Name="Bdr1" Background="#66FFFFFF" Opacity="0.5" Visibility="Collapsed"/>
+        <Border x:Name="Bdr" BorderThickness="2" BorderBrush="#66FFFFFF" Visibility="Collapsed"/>
     </Grid>
 </local:CheckControl>

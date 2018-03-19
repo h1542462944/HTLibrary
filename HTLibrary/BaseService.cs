@@ -12,55 +12,10 @@ namespace User
 {
     public static  class Tools
     {
-        /// <summary>
-        /// 支持转换的类型, 0:可以直接转换,1:需要借助Parse,2:需要自定义转换方法,3:使用ISettingsConvert接口.
-        /// </summary>
-        public static Dictionary<string, int> SettingsTypes = new Dictionary<string, int>
-                {
-                {"System.Byte",0},
-                {"System.SByte",0},
-                { "System.Int16",0},
-                { "System.Int32",0},
-                { "System.Int64",0},
-                { "System.UInt16",0},
-                { "System.UInt32",0},
-                { "System.Single",0},
-                { "System.Double",0},
-                { "System.Char",0},
-                { "System.String",0},
-                { "System.Decimal",0},
-                { "System.Boolean",0},
-                { "System.DateTime",0 },
-                {"System.Windows.Point",1},
-                { "System.Windows.Size",1},
-                { "System.Windows.Media.Color",2}
-                };
-        public static Dictionary<Type, int> SettingsType = new Dictionary<Type, int>
-        {
-            {typeof(byte),0 },
-            {typeof(sbyte),0},
-            {typeof(short),0 },
-            {typeof(int) ,0},
-            {typeof(long),0},
-            {typeof(ushort),0},
-            {typeof(uint),0 },
-            {typeof(ulong),0},
-            {typeof(float),0 },
-            {typeof(double),0},
-            {typeof(char),0},
-            {typeof(string),0 },
-            {typeof(decimal),0},
-            {typeof(bool),0 },
-            {typeof(DateTime),0},
-            {typeof(System.Windows.Point),1},
-            {typeof(System.Windows.Size),1},
-            {typeof(System.Windows.Media.Color),2}
-        };
-
         public static System.Windows.Point GetMousePosition()
         {
             System.Drawing.Point point = System.Windows.Forms.Control.MousePosition;
-            return new System.Windows.Point(point.X / UI.PrimaryScreen.ScaleX , point.Y  / UI.PrimaryScreen.ScaleY);
+            return new System.Windows.Point(point.X / Windows.PrimaryScreen.ScaleX , point.Y  / Windows.PrimaryScreen.ScaleY);
         }
         public static string ShortTimeStringInvoke(string hour, string minute)
         {
@@ -217,32 +172,5 @@ namespace User
             );
             xDocument.Save(FilePath);
         }
-    }
-    public static class Win32API
-    {
-        [System.Runtime.InteropServices.DllImport("User32.dll")]
-        static extern bool ShowWindowAsync(IntPtr hWnd, int cmdShow);
-        [System.Runtime.InteropServices.DllImport("user32.dll", EntryPoint = "SetForegroundWindow")]
-        public static extern bool SetForegroundWindow(IntPtr hWnd);//设置此窗体为活动窗体
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
-        public static extern bool IsIconic(IntPtr hWnd);
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
-        public static extern bool IsZoomed(IntPtr hWnd);
-
-        public static bool ShowWindowAsync(IntPtr hWnd, Win32WindowState windowState)
-        {
-            return ShowWindowAsync(hWnd, (int)windowState);
-        }
-    }
-    public enum Win32WindowState
-    {
-        Hide = 0,
-        Normal = 1,
-        Maximize = 3,
-        ShowNoActivate = 4,
-        Show = 5,
-        Minimize = 6,
-        Restore = 9,
-        Showdefault = 10
     }
 }

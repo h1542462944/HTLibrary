@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace User.SoftWare
+namespace User.SoftWare.Service
 {
     public class Weather
     {

@@ -13,7 +13,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Threading;
 using System.ComponentModel;
 
-namespace User.UI
+namespace User.Windows
 {
     public struct ScreenMonitorAna
     {
