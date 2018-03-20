@@ -81,7 +81,7 @@ namespace User.UI
                 Bdr1.Visibility = Visibility.Hidden;
             }
         }
-        protected override void OnIsEnabled()
+        protected override void OnCanCheckedChanged()
         {
             if (IsEnabled)
             {

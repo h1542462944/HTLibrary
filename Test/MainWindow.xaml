@@ -8,13 +8,8 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid Background="#FF797676">
-        <libr:TriggerImage x:Name="TriggerImage1" VerticalAlignment="Top" ControlStyle="Dark" HorizontalAlignment="Left" Height="40" Width="40" Margin="176,82,0,0"/>
-        <libr:TriggerSwitch HorizontalAlignment="Left" Height="20" Margin="245,102,0,0" VerticalAlignment="Top" Width="50" ThemeColor="DeepSkyBlue" IsChecked="True" IsEnabled="True"/>
-        <libr:SlideBar x:Name="SliderBar1" HorizontalAlignment="Left" Height="27" Margin="98,144,0,0" VerticalAlignment="Top" Width="140" SlideValue="52" ControlStyle="Dark" SlideStyle="TickValue" SlideValueChanged="SlideBar_SlideValueChanged" TickValue="42" />
-        <Label x:Name="Lbl1" Content="Label" HorizontalAlignment="Left" Height="30" Margin="251,144,0,0" VerticalAlignment="Top" Width="59"/>
-        <libr:ColorPicker x:Name="ColorPicker1" HorizontalAlignment="Left" Height="205" Margin="323,92,0,0" VerticalAlignment="Top" Width="188" />
-        <libr:UImageMenu HorizontalAlignment="Left" Height="43" Margin="118,208,0,0" ControlStyle="Light" VerticalAlignment="Top" Width="177" Tapped="UImageMenu_Tapped"/>
-        <libr:QuickButton HorizontalAlignment="Left" Height="77" Margin="273,10,0,0" VerticalAlignment="Top" Width="113" IsChecked="True" ThemeColor="#FF1B9773" />
-        <Label x:Name="LblE" Content="Label" HorizontalAlignment="Left" Height="41" Margin="413,38,0,0" VerticalAlignment="Top" Width="85"/>
+        <libr:TriggerImage Width="40" Height="40" ControlStyle="Dark"/>
+        <libr:TriggerButton Width="84" Height="40" ControlStyle="Dark" VerticalAlignment="Top" InnerContent="123" Foreground="White" FontSize="18"/>
+        
     </Grid>
 </Window>

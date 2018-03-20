@@ -132,39 +132,33 @@ namespace User.UI
             get { return (bool)GetValue(CanAutoCheckProperty); }
             set { SetValue(CanAutoCheckProperty, value); }
         }
-        public new bool IsEnabled
+        public bool CanChecked
         {
-            get { return (bool)GetValue(IsEnabledProperty); }
-            set { SetValue(IsEnabledProperty, value); }
+            get { return (bool)GetValue(CanCheckedProperty); }
+            set { SetValue(CanCheckedProperty, value); }
         }
 
         public static readonly DependencyProperty IsCheckedProperty =
             DependencyProperty.Register("IsChecked", typeof(bool), typeof(CheckControl), new PropertyMetadata(false, new PropertyChangedCallback(IsChecked_Changed)));
         public static readonly DependencyProperty CanAutoCheckProperty =
-           DependencyProperty.Register("CanAutoCheck", typeof(bool), typeof(CheckControl), new PropertyMetadata(true));
-        public static new readonly DependencyProperty IsEnabledProperty =
-           DependencyProperty.Register("IsEnabled", typeof(bool), typeof(CheckControl), new PropertyMetadata(true, new PropertyChangedCallback(IsEnabled_Changed)));
-
+            DependencyProperty.Register("CanAutoCheck", typeof(bool), typeof(CheckControl), new PropertyMetadata(true));
+        public static readonly DependencyProperty CanCheckedProperty =
+            DependencyProperty.Register("CanChecked", typeof(bool), typeof(CheckControl), new PropertyMetadata(true, new PropertyChangedCallback(CanChecked_Changed)));
 
         protected virtual void OnChecked() { }
-        protected override void OnControlStyleChanged()
+        protected virtual void OnCanCheckedChanged()
         {
+
         }
-        protected override void OnHighLightChanged()
-        {
-        }
-        protected virtual void OnIsEnabled()
-        {
-        }
+
         private static void IsChecked_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             CheckControl arg = (CheckControl)d;
             arg.OnChecked();
         }
-        private static void IsEnabled_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void CanChecked_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            CheckControl arg = (CheckControl)d;
-            arg.OnIsEnabled();
+            ((CheckControl)d).OnCanCheckedChanged();
         }
     }
 }

@@ -71,6 +71,9 @@
     </Compile>
     <Compile Include="UI\ControlBase.cs" />
     <Compile Include="UI\DragWindow.cs" />
+    <Compile Include="UI\TriggerButton.xaml.cs">
+      <DependentUpon>TriggerButton.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\HotKey.cs" />
     <Compile Include="Windows\ImagePicker.cs" />
     <Compile Include="UI\Inventory.cs" />
@@ -107,6 +110,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\SlideBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\TriggerButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

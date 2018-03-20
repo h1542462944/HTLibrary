@@ -29,7 +29,6 @@ namespace Test
         public MainWindow()
         {
             InitializeComponent();
-            Loaded += MainWindow_Loaded;
             Area.uSettings.USettingsChanged += USettings_USettingsChanged;
             Area.Flush();
             Area.uSettings.ReSet(true);
@@ -40,11 +39,6 @@ namespace Test
             Console.WriteLine(key.Name + e.NewValue);
         }
 
-        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            Lbl1.SetBinding(ContentProperty, new Binding("SlideValueInt") { Source = SliderBar1 });
-            ColorPicker1.Value = new ColorP(Colors.OrangeRed);
-        }
         private void SlideBar_SlideValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             //Lbl1.Content = (int)e.NewValue;

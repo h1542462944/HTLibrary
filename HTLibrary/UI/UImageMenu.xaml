@@ -6,15 +6,22 @@
              xmlns:local="clr-namespace:User.UI"
              mc:Ignorable="d" 
              d:DesignHeight="40" d:DesignWidth="160">
-    <Grid x:Name="Grid1" Background="Transparent" >
+    <Grid x:Name="Grid1" Background="Transparent" RenderTransformOrigin="0.5,0.5" >
+        <Grid.RenderTransform>
+            <TransformGroup>
+                <ScaleTransform x:Name="Scale" ScaleX="1" ScaleY="1"/>
+                <SkewTransform/>
+                <RotateTransform/>
+                <TranslateTransform/>
+            </TransformGroup>
+        </Grid.RenderTransform>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="40"/>
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <Border x:Name="BdrBack" Grid.ColumnSpan="2" Background="#99FFFFFF" Visibility="Collapsed"/>
-        <Border Margin="5" Background="LightGray"/>
         <Image x:Name="ImageIcon" Margin="5" />
         <Label x:Name="LabelTitle" Grid.Column="1" Foreground="White" Content="标题" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="18"/>
-        <Border x:Name="Border1" Grid.ColumnSpan="2" BorderThickness="2" BorderBrush="#99FFFFFF" Visibility="Collapsed" Background="Transparent"/>
+        <Border x:Name="Bdr1" Grid.ColumnSpan="2" Background="#66FFFFFF" Visibility="Collapsed" Opacity="0.5"/>
+        <Border x:Name="Bdr" Grid.ColumnSpan="2" BorderThickness="2" BorderBrush="#66FFFFFF" Visibility="Collapsed" Background="Transparent"/>
     </Grid>
 </local:UControl>

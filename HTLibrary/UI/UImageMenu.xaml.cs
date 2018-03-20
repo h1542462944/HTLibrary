@@ -18,7 +18,7 @@ namespace User.UI
     /// <summary>
     /// UImageMenu.xaml 的交互逻辑
     /// </summary>
-    public partial class UImageMenu : User.UI.UControl
+    public partial class UImageMenu : UControl
     {
         public UImageMenu()
         {
@@ -46,23 +46,23 @@ namespace User.UI
             if (ControlStyle == ControlStyle.Transparent)
             {
                 this.Grid1.Background = Brushes.Transparent;
-                this.Border1.BorderBrush = ControlBase.UWhiteBrush;
+                this.Bdr.BorderBrush = ControlBase.UWhiteBrush;
                 this.LabelTitle.Foreground = Brushes.White;
-                BdrBack.Background = ControlBase.UWhiteBrush;
+                Bdr1.Background = ControlBase.UWhiteBrush;
             }
             else if (ControlStyle == ControlStyle.Light)
             {
-                this.Grid1.Background = ControlBase.DWhiteBrush;
-                this.Border1.BorderBrush = ControlBase.UBlackBrush;
+                this.Grid1.Background = ControlBase.LightGrayBrush;
+                this.Bdr.BorderBrush = ControlBase.UBlackBrush;
                 this.LabelTitle.Foreground = Brushes.Black;
-                BdrBack.Background = ControlBase.UBlackBrush;
+                Bdr1.Background = ControlBase.UBlackBrush;
             }
             else
             {
-                this.Grid1.Background = ControlBase.DBlackBrush;
-                this.Border1.BorderBrush = ControlBase.UWhiteBrush;
+                this.Grid1.Background = ControlBase.DeepGrayBrush;
+                this.Bdr.BorderBrush = ControlBase.UWhiteBrush;
                 this.LabelTitle.Foreground = Brushes.White;
-                BdrBack.Background = ControlBase.UWhiteBrush;
+                Bdr1.Background = ControlBase.UWhiteBrush;
             }
         }
         void OnTextChanged()
@@ -77,21 +77,27 @@ namespace User.UI
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                BdrBack.Visibility = Visibility.Visible;
+                Bdr1.Visibility = Visibility.Visible;
+                Scale.ScaleX = 0.95;
+                Scale.ScaleY = 0.95;
             }
         }
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            Border1.Visibility = Visibility.Visible;
+            Bdr.Visibility = Visibility.Visible;
         }
         protected override void OnMouseLeave(MouseEventArgs e)
         {
-            Border1.Visibility = Visibility.Collapsed;
-            BdrBack.Visibility = Visibility.Collapsed;
+            Bdr.Visibility = Visibility.Collapsed;
+            Bdr1.Visibility = Visibility.Collapsed;
+            Scale.ScaleX = 1;
+            Scale.ScaleY = 1;
         }
         protected override void OnMouseUp(MouseButtonEventArgs e)
         {
-            BdrBack.Visibility = Visibility.Collapsed;
+            Bdr1.Visibility = Visibility.Collapsed;
+            Scale.ScaleX = 1;
+            Scale.ScaleY = 1;
         }
 
         private static void Text_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)

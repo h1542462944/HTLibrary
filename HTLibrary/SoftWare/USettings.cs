@@ -323,9 +323,9 @@ namespace User.SoftWare
                 if (IsMonitor)
                 {
                     Watcher = new FileSystemWatcher(Folder, "*.xml");
+                    Watcher.Changed += Watcher_Changed;
+                    Watcher.EnableRaisingEvents = true;
                 }
-                Watcher.Changed += Watcher_Changed;
-                Watcher.EnableRaisingEvents = true;
                 SetValue(info);
             }
             else
