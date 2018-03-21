@@ -9,15 +9,15 @@ using System.Xml.Linq;
 
 namespace User.SoftWare.Service
 {
-    public class Weather
+    public class Weathersojson
     {
-        static WeatherCurrentInfo _current;
-        static WeatherHistoryInfo _yesterday;
-        static WeatherHistoryInfo[] _forecast;
+        static WeatherCurrentInfosojson _current;
+        static WeatherHistoryInfosojson _yesterday;
+        static WeatherHistoryInfosojson[] _forecast;
 
-        public static WeatherCurrentInfo Current => _current;
-        public static WeatherHistoryInfo Yesterday => _yesterday;
-        public static WeatherHistoryInfo[] Forecast => _forecast;
+        public static WeatherCurrentInfosojson Current => _current;
+        public static WeatherHistoryInfosojson Yesterday => _yesterday;
+        public static WeatherHistoryInfosojson[] Forecast => _forecast;
 
         public static void Load()
         {
@@ -31,13 +31,13 @@ namespace User.SoftWare.Service
                     XElement element = xDocument.Root;
                     XElement eyesterday = element.Element("yesterday");
                     IEnumerable<XElement> eforecast = element.Element("forecast").Elements("weather");
-                    List<WeatherHistoryInfo> wforecast = new List<WeatherHistoryInfo>();
+                    List<WeatherHistoryInfosojson> wforecast = new List<WeatherHistoryInfosojson>();
                     foreach (var item in eforecast)
                     {
                         wforecast.Add(GetWeatherHistoryInfo(item));
                     }
 
-                    _current = new WeatherCurrentInfo(
+                    _current = new WeatherCurrentInfosojson(
                     element.Element("city").Value,
                     element.Element("updatetime").Value,
                     int.Parse(element.Element("wendu").Value),
@@ -47,7 +47,7 @@ namespace User.SoftWare.Service
                     element.Element("sunrise_1").Value,
                     element.Element("sunset_1").Value);
 
-                    _yesterday = new WeatherHistoryInfo(
+                    _yesterday = new WeatherHistoryInfosojson(
                         eyesterday.Element("date_1").Value,
                         int.Parse(eyesterday.Element("high_1").Value.Substring(3, eyesterday.Element("high_1").Value.Length - 4)),
                         int.Parse(eyesterday.Element("low_1").Value.Substring(3, eyesterday.Element("low_1").Value.Length - 4)),
@@ -63,9 +63,9 @@ namespace User.SoftWare.Service
             }
         }
 
-        static WeatherHistoryInfo GetWeatherHistoryInfo(XElement element)
+        static WeatherHistoryInfosojson GetWeatherHistoryInfo(XElement element)
         {
-            return new WeatherHistoryInfo(
+            return new WeatherHistoryInfosojson(
                 element.Element("date").Value,
                 int.Parse(element.Element("high").Value.Substring(3, element.Element("high").Value.Length - 4)),
                 int.Parse(element.Element("low").Value.Substring(3, element.Element("low").Value.Length - 4)),
@@ -78,7 +78,7 @@ namespace User.SoftWare.Service
                 );
         }
     }
-    public struct WeatherCurrentInfo
+    public struct WeatherCurrentInfosojson
     {
         string city;
         string updateTime;
@@ -89,7 +89,7 @@ namespace User.SoftWare.Service
         string sunrisetime;
         string sunsettime;
 
-        public WeatherCurrentInfo(string city, string updateTime, int temperature, string winddestination, string windpower, int humidity, string sunrisetime, string sunsettime)
+        public WeatherCurrentInfosojson(string city, string updateTime, int temperature, string winddestination, string windpower, int humidity, string sunrisetime, string sunsettime)
         {
             this.city = city;
             this.updateTime = updateTime;
@@ -117,7 +117,7 @@ namespace User.SoftWare.Service
                 );
         }
     }
-    public struct WeatherHistoryInfo
+    public struct WeatherHistoryInfosojson
     {
         string date;
         int uppertemperature;
@@ -129,7 +129,7 @@ namespace User.SoftWare.Service
         string nightwinddestination;
         string nightwindpower;
 
-        public WeatherHistoryInfo(string date, int uppertemperature, int lowertemperature, string dayweather, string daywinddestination, string daywindpower, string nightweather, string nightwinddestination, string nightwindpower)
+        public WeatherHistoryInfosojson(string date, int uppertemperature, int lowertemperature, string dayweather, string daywinddestination, string daywindpower, string nightweather, string nightwinddestination, string nightwindpower)
         {
             this.date = date;
             this.uppertemperature = uppertemperature;
@@ -155,6 +155,81 @@ namespace User.SoftWare.Service
         public override string ToString()
         {
             return string.Format("{0} {1} {2} {3} {4} {5} {6} {7} ", Date, Uppertemperature, Lowertemperature, Dayweather, Daywinddestination, Daywindpower, Nightweather, Nightwinddestination, Nightwindpower);
+        }
+    }
+
+    public class Weatherwebxml
+    {
+        static DateTime lastTime = new DateTime();
+        public static DateTime UpdateTime { get; private set; }
+        public static WeatherForcastInfo[] Weather { get; private set; }
+        public static string City { get; private set; }
+        public static event Action Completed;
+        public static void Load(string city)
+        {
+            if (DateTime.Now - lastTime > TimeSpan.FromHours(1))
+            {
+                WeatherService.WeatherWebService weatherservice = new WeatherService.WeatherWebService();
+                string[] s = weatherservice.getWeatherbyCityName(city);
+                DateTime updateTime = DateTime.Parse(s[4]);
+                WeatherForcastInfo[] weatherinfo = new WeatherForcastInfo[3];
+                weatherinfo[0] = new WeatherForcastInfo(DateTime.Today, GetWeather(s[6]), GetTemp(s[5]));
+                weatherinfo[1] = new WeatherForcastInfo(DateTime.Today.AddDays(1), GetWeather(s[13]), GetTemp(s[12]));
+                weatherinfo[2] = new WeatherForcastInfo(DateTime.Today.AddDays(2), GetWeather(s[18]), GetTemp(s[17]));
+
+                City = s[1];
+                UpdateTime = updateTime;
+                Weather = weatherinfo;
+
+                lastTime = DateTime.Now;
+            }
+            Completed?.Invoke();
+        }
+        public static async Task LoadAsync(string city)
+        {
+            await Task.Run(() => Load(city));
+        }
+
+        private static int[] GetTemp(string arg)
+        {
+            string[] ts = new string[2];
+            int i = 0;
+            foreach (var item in arg)
+            {
+                if ((item >= '0' && item <= '9') || item =='-')
+                {
+                    ts[i] += item;
+                }
+                else if (item == '/')
+                {
+                    i++;
+                }
+            }
+            return new int[] { int.Parse(ts[0]), int.Parse(ts[1]) };
+        }
+        private static string GetWeather(string arg)
+        {
+            return arg.Split(' ')[1];
+        }
+    }
+    public struct WeatherForcastInfo
+    {
+        public WeatherForcastInfo(DateTime time, string weather, int[] temp) : this()
+        {
+            Time = time;
+            Weather = weather;
+            LowerTemp = temp[0];
+            UpperTemp = temp[1];
+        }
+
+        public DateTime Time { get;private set; }
+        public string Weather { get; private set; }
+        public int LowerTemp { get; private set; }
+        public int UpperTemp { get; private set; }
+
+        public override string ToString()
+        {
+            return string.Format("{0} {1} {2}-{3}", Time.ToShortDateString(), Weather, LowerTemp, UpperTemp);
         }
     }
 }

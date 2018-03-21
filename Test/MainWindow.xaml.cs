@@ -49,7 +49,11 @@ namespace Test
 
             //Application.Current.Shutdown();
         }
-        
+
+        private void TriggerImage_Tapped(object sender, RoutedEventArgs e)
+        {
+            QB1.IsOpened = !QB1.IsOpened;
+        }
     }
 
     public class Area

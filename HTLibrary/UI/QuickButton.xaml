@@ -5,9 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:User.UI"
              mc:Ignorable="d" 
-             d:DesignHeight="80" d:DesignWidth="102" MouseDown="Control_MouseDown" MouseLeave="Control_MouseLeave" MouseMove="Control_MouseMove" MouseUp="Control_MouseUp" Tapped="Control_Tapped">
+             d:DesignHeight="80" d:DesignWidth="102" Background="Transparent" MouseDown="Control_MouseDown" MouseLeave="Control_MouseLeave" MouseMove="Control_MouseMove" MouseUp="Control_MouseUp" Tapped="Control_Tapped">
     <Grid RenderTransformOrigin="0.5,0.5" >
-        <Grid x:Name="GridMain" Background="#CC333333">
+        <Grid x:Name="GridMain" >
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -23,6 +23,7 @@
             <Label x:Name="LblTitle" Grid.Row="1" Content="设置" VerticalAlignment="Center" Foreground="#CCFFFFFF"/>
         </Grid>
         <Border x:Name="Bdr1" Background="#66FFFFFF" Opacity="0.5" Visibility="Collapsed"/>
+        <Border x:Name="Bdr2" Background="#66FFFFFF" Opacity="0.5" Visibility="Collapsed"/>
         <Border x:Name="Bdr" BorderThickness="2" BorderBrush="#66FFFFFF" Visibility="Collapsed"/>
         <Grid.RenderTransform>
             <TransformGroup>

@@ -8,8 +8,8 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid Background="#FF797676">
-        <libr:TriggerImage Width="40" Height="40" ControlStyle="Dark"/>
+        <libr:TriggerImage Width="40" Height="40" ControlStyle="Dark" Tapped="TriggerImage_Tapped"/>
         <libr:TriggerButton Width="84" Height="40" ControlStyle="Dark" VerticalAlignment="Top" InnerContent="123" Foreground="White" FontSize="18"/>
-        
+        <libr:QuickButton x:Name="QB1" Margin="85,220,346,47.667" ControlStyle="Dark" IsOpened="False"/>
     </Grid>
 </Window>

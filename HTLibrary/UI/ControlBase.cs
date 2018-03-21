@@ -46,12 +46,15 @@ namespace User.UI
         /// 颜色为#CCCCCCCC的笔刷.
         /// </summary>
         public static readonly Brush LightGrayBrush = new SolidColorBrush(Color.FromArgb(204, 204, 204, 204));
+        public static Color ThemeColorDefault => Color.FromRgb(0x1b, 0x97, 0x73);
     }
     /// <summary>
     /// 为用户控件提供统一的内容模型.
     /// </summary>
     public class UControl : UserControl
     {
+        public static readonly DependencyProperty IsOpenedProperty =
+           DependencyProperty.Register("IsOpened", typeof(bool), typeof(UControl), new PropertyMetadata(true, new PropertyChangedCallback(IsOpened_Changed)));
         public static readonly DependencyProperty ControlStyleProperty =
            DependencyProperty.Register("ControlStyle", typeof(ControlStyle), typeof(UControl), new PropertyMetadata(ControlStyle.Transparent, new PropertyChangedCallback(ControlStyle_Changed)));
         public static readonly DependencyProperty IsHighLightProperty =
@@ -67,6 +70,11 @@ namespace User.UI
             this.MouseLeftButtonUp += UControl_MouseLeftButtonUp;
         }
 
+        public bool IsOpened
+        {
+            get { return (bool)GetValue(IsOpenedProperty); }
+            set { SetValue(IsOpenedProperty, value); }
+        }
         public ControlStyle ControlStyle
         {
             get { return (ControlStyle)GetValue(ControlStyleProperty); }
@@ -83,6 +91,10 @@ namespace User.UI
             set { SetValue(ThemeColorProperty, value); }
         }
         public event RoutedEventHandler Tapped;
+        protected virtual void OnIsOpenChanged()
+        {
+
+        }
         protected virtual void OnControlStyleChanged() { }
         protected virtual void OnHighLightChanged() { }
         protected virtual void OnThemeColor() { }
@@ -96,10 +108,14 @@ namespace User.UI
         }
         private void UControl_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            if (isLeftMouseDown)
+            if (IsOpened && isLeftMouseDown)
             {
                 Tapped?.Invoke(this, new RoutedEventArgs());
             }
+        }
+        private static void IsOpened_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((UControl)d).OnIsOpenChanged();
         }
         private static void ControlStyle_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -122,6 +138,7 @@ namespace User.UI
     /// </summary>
     public class CheckControl : UControl
     {
+
         public bool IsChecked
         {
             get { return (bool)GetValue(IsCheckedProperty); }
@@ -132,33 +149,18 @@ namespace User.UI
             get { return (bool)GetValue(CanAutoCheckProperty); }
             set { SetValue(CanAutoCheckProperty, value); }
         }
-        public bool CanChecked
-        {
-            get { return (bool)GetValue(CanCheckedProperty); }
-            set { SetValue(CanCheckedProperty, value); }
-        }
 
         public static readonly DependencyProperty IsCheckedProperty =
             DependencyProperty.Register("IsChecked", typeof(bool), typeof(CheckControl), new PropertyMetadata(false, new PropertyChangedCallback(IsChecked_Changed)));
         public static readonly DependencyProperty CanAutoCheckProperty =
             DependencyProperty.Register("CanAutoCheck", typeof(bool), typeof(CheckControl), new PropertyMetadata(true));
-        public static readonly DependencyProperty CanCheckedProperty =
-            DependencyProperty.Register("CanChecked", typeof(bool), typeof(CheckControl), new PropertyMetadata(true, new PropertyChangedCallback(CanChecked_Changed)));
 
         protected virtual void OnChecked() { }
-        protected virtual void OnCanCheckedChanged()
-        {
-
-        }
 
         private static void IsChecked_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             CheckControl arg = (CheckControl)d;
             arg.OnChecked();
-        }
-        private static void CanChecked_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((CheckControl)d).OnCanCheckedChanged();
         }
     }
 }

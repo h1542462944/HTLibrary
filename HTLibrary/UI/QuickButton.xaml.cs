@@ -67,6 +67,7 @@ namespace User.UI
                 if (!IsChecked)
                     GridMain.Background = Brushes.Transparent;
                 Bdr1.BorderBrush = ControlBase.UWhiteBrush;
+                Bdr2.BorderBrush = ControlBase.UWhiteBrush;
                 Bdr.BorderBrush = ControlBase.UWhiteBrush;
                 Lbl1.Foreground = ControlBase.DWhiteBrush;
                 LblTitle.Foreground = ControlBase.DWhiteBrush;
@@ -76,6 +77,7 @@ namespace User.UI
                 if (!IsChecked)
                     GridMain.Background = ControlBase.LightGrayBrush;
                 Bdr1.BorderBrush = ControlBase.UBlackBrush;
+                Bdr2.BorderBrush = ControlBase.UBlackBrush;
                 Bdr.BorderBrush = ControlBase.UBlackBrush;
                 Lbl1.Foreground = ControlBase.DBlackBrush;
                 LblTitle.Foreground = ControlBase.DBlackBrush;
@@ -85,6 +87,7 @@ namespace User.UI
                 if (!IsChecked)
                     GridMain.Background = ControlBase.DeepGrayBrush;
                 Bdr1.BorderBrush = ControlBase.UWhiteBrush;
+                Bdr2.BorderBrush = ControlBase.UWhiteBrush;
                 Bdr.BorderBrush = ControlBase.UWhiteBrush;
                 Lbl1.Foreground = ControlBase.DWhiteBrush;
                 LblTitle.Foreground = ControlBase.DWhiteBrush;
@@ -105,6 +108,17 @@ namespace User.UI
         {
             OnChecked();
         }
+        protected override void OnIsOpenChanged()
+        {
+            if (IsOpened)
+            {
+                Bdr2.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                Bdr2.Visibility = Visibility.Visible;
+            }
+        }
         private static void ImageSource_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             ((QuickButton)d).OnImageSourceChanged();
@@ -120,7 +134,7 @@ namespace User.UI
 
         private void Control_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.ChangedButton == MouseButton.Left)
+            if (IsOpened && e.ChangedButton == MouseButton.Left)
             {
                 Bdr1.Visibility = Visibility.Visible;
                 Scale.ScaleX = 0.95;
@@ -136,7 +150,7 @@ namespace User.UI
         }
         private void Control_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Released)
+            if (IsOpened && e.LeftButton == MouseButtonState.Released)
             {
                 Bdr.Visibility = Visibility.Visible;
             }

@@ -28,14 +28,14 @@ namespace User.UI
 
         protected override void OnThemeColor()
         {
-            if (IsEnabled && IsChecked)
+            if (IsOpened && IsChecked)
             {
                 OnChecked();
             }
         }
         protected override void OnChecked()
         {
-            if (IsEnabled)
+            if (IsOpened)
             {
                 if (!IsChecked)
                 {
@@ -48,12 +48,12 @@ namespace User.UI
                     Path1.Fill = new SolidColorBrush(this.ThemeColor);
                     Elp1.Fill = Brushes.White;
                     Elp1.Margin = new Thickness(32, 5.5, 0, 0);
-                } 
+                }
             }
         }
         protected override void OnControlStyleChanged()
         {
-            if (IsEnabled && !IsChecked)
+            if (IsOpened && !IsChecked)
             {
                 Path1.Fill = null;
                 if (ControlStyle == ControlStyle.Light)
@@ -81,9 +81,9 @@ namespace User.UI
                 Bdr1.Visibility = Visibility.Hidden;
             }
         }
-        protected override void OnCanCheckedChanged()
+        protected override void OnIsOpenChanged()
         {
-            if (IsEnabled)
+            if (IsOpened)
             {
                 OnChecked();
                 OnControlStyleChanged();
@@ -104,49 +104,56 @@ namespace User.UI
                 }
             }
         }
+        public void InvokeCheck(bool value)
+        {
+            if (IsChecked == value)
+            {
+                return;
+            }
+            OnChecked();
+            Thickness t1 = new Thickness(8, 5.5, 0, 0);
+            Thickness t2 = new Thickness(32, 5.5, 0, 0);
+            ThicknessAnimation thicknessAnimation = new ThicknessAnimation
+            {
+                Duration = new Duration(TimeSpan.FromMilliseconds(200)),
+            };
 
+            if (!IsChecked)
+            {
+                thicknessAnimation.From = t1;
+                thicknessAnimation.To = t2;
+            }
+            else
+            {
+                thicknessAnimation.From = t2;
+                thicknessAnimation.To = t1;
+            }
+
+            IsChecked = !IsChecked;
+
+            Storyboard storyboard = new Storyboard();
+            storyboard.Children.Add(thicknessAnimation);
+            Storyboard.SetTarget(thicknessAnimation, Elp1);
+            Storyboard.SetTargetProperty(thicknessAnimation, new PropertyPath("Margin"));
+            storyboard.Begin();
+        }
         private void Grid_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            if (IsEnabled && e.ChangedButton == MouseButton.Left)
+            if (IsOpened && e.ChangedButton == MouseButton.Left)
             {
-                OnChecked();
-                Thickness t1 = new Thickness(8, 5.5, 0, 0);
-                Thickness t2 = new Thickness(32, 5.5, 0, 0);
-                ThicknessAnimation thicknessAnimation = new ThicknessAnimation
-                {
-                    Duration = new Duration(TimeSpan.FromMilliseconds(200)),
-                };
-
-                if (!IsChecked)
-                {
-                    thicknessAnimation.From = t1;
-                    thicknessAnimation.To = t2;
-                }
-                else
-                {
-                    thicknessAnimation.From = t2;
-                    thicknessAnimation.To = t1;
-                }
-
-                IsChecked = !IsChecked;
-
-                Storyboard storyboard = new Storyboard();
-                storyboard.Children.Add(thicknessAnimation);
-                Storyboard.SetTarget(thicknessAnimation, Elp1);
-                Storyboard.SetTargetProperty(thicknessAnimation, new PropertyPath("Margin"));
-                storyboard.Begin();
+                InvokeCheck(!IsChecked);
             }
         }
         private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (IsEnabled)
+            if (IsOpened)
             {
                 if (e.LeftButton == MouseButtonState.Pressed)
                 {
                     Path1.Stroke = new SolidColorBrush(ThemeColor);
                     Path1.Fill = new SolidColorBrush(ThemeColor);
                     IsHighLight = false;
-                } 
+                }
             }
         }
         private void Grid_MouseLeave(object sender, MouseEventArgs e)
@@ -156,18 +163,19 @@ namespace User.UI
         }
         private void Grid_MouseMove(object sender, MouseEventArgs e)
         {
-            if (IsEnabled)
+            if (IsOpened)
             {
                 if (Mouse.LeftButton == MouseButtonState.Pressed)
                 {
                     Path1.Stroke = new SolidColorBrush(ThemeColor);
                     Path1.Fill = new SolidColorBrush(ThemeColor);
                 }
-                if (IsChecked)
+                if (IsChecked && IsOpened)
                 {
                     Path2.Visibility = Visibility.Visible;
                 }
             }
         }
+        
     }
 }
