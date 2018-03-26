@@ -63,6 +63,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="PropertyChangedEvent.cs" />
+    <Compile Include="SoftWare\Service\AutoCheck.cs" />
     <Compile Include="SoftWare\Service\AutoText.cs" />
     <Compile Include="SoftWare\Service\WeatherText.cs" />
     <Compile Include="SoftWare\ULogger.cs" />

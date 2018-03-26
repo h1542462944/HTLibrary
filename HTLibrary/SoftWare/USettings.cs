@@ -162,7 +162,7 @@ namespace User.SoftWare
         /// 通知设置值以改变或者初始化.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1009:DeclareEventHandlersCorrectly")]
-        public event USettingsChangedEventHander USettingsChanged;
+        public event USettingsChangedEventHandler USettingsChanged;
         /// <summary>
         /// 注册一个设置对象.
         /// </summary>
@@ -202,7 +202,7 @@ namespace User.SoftWare
                         arg.Replace(value);
                         if (arg.IsEvent)
                         {
-                            USettingsChanged?.Invoke(new USettingsProperty(this, name), new PropertyChangedEventargs(oldvalue, value));
+                            USettingsChanged?.Invoke(new USettingsProperty(this, name), new UPropertyChangedEventArgs(oldvalue, value));
                         }
                         return value;
                     }
@@ -230,7 +230,7 @@ namespace User.SoftWare
                     SetValue(arg);
                     if (arg.IsEvent)
                     {
-                        USettingsChanged?.Invoke(new USettingsProperty(this, name), new PropertyChangedEventargs(oldvalue, value));
+                        USettingsChanged?.Invoke(new USettingsProperty(this, name), new UPropertyChangedEventArgs(oldvalue, value));
                     }
                 }
                 else
@@ -681,5 +681,5 @@ namespace User.SoftWare
         }
 
     }
-    public delegate void USettingsChangedEventHander(USettingsProperty key, PropertyChangedEventargs e);
+    public delegate void USettingsChangedEventHandler(USettingsProperty key, UPropertyChangedEventArgs e);
 }

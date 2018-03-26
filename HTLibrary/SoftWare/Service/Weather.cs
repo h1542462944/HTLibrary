@@ -189,6 +189,11 @@ namespace User.SoftWare.Service
         {
             await Task.Run(() => Load(city));
         }
+        public static string[] Test(string city)
+        {
+            WeatherService.WeatherWebService weatherservice = new WeatherService.WeatherWebService();
+            return weatherservice.getWeatherbyCityName(city);
+        }
 
         private static int[] GetTemp(string arg)
         {

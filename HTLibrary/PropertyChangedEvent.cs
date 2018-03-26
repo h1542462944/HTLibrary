@@ -9,12 +9,12 @@ namespace User
     /// <summary>
     /// 属性改变或初始化加载时触发的事件数据.
     /// </summary>
-    public sealed class PropertyChangedEventargs : EventArgs
+    public sealed class UPropertyChangedEventArgs : EventArgs
     {
         object oldValue;
         object newValue;
 
-        public PropertyChangedEventargs(object oldValue, object newValue)
+        public UPropertyChangedEventArgs(object oldValue, object newValue)
         {
             this.oldValue = oldValue;
             this.newValue = newValue;
@@ -35,12 +35,12 @@ namespace User
     /// <summary>
     /// 属性改变或初始化加载时触发的事件数据.
     /// </summary>
-    public sealed class PropertyChangedEventargs<TValue> : EventArgs
+    public sealed class UPropertyChangedEventArgs<TValue> : EventArgs
     {
         TValue oldValue;
         TValue newValue;
 
-        public PropertyChangedEventargs(TValue oldValue, TValue newValue)
+        public UPropertyChangedEventArgs(TValue oldValue, TValue newValue)
         {
             this.oldValue = oldValue;
             this.newValue = newValue;
@@ -58,10 +58,11 @@ namespace User
         /// </summary>
         public bool IsNewest => OldValue == null;
 
-        public static implicit operator PropertyChangedEventargs(PropertyChangedEventargs<TValue> arg)
+        public static implicit operator UPropertyChangedEventArgs(UPropertyChangedEventArgs<TValue> arg)
         {
-            return new PropertyChangedEventargs(arg.oldValue, arg.newValue);
+            return new UPropertyChangedEventArgs(arg.oldValue, arg.newValue);
         }
     }
-    public delegate void PropertyChangedEventHander<TValue>(object sender, PropertyChangedEventargs<TValue> e);
+    public delegate void UPropertyChangedEventHandler(object sender, UPropertyChangedEventArgs e);
+    public delegate void UPropertyChangedEventHandler<TValue>(object sender, UPropertyChangedEventArgs<TValue> e);
 }

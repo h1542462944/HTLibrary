@@ -77,8 +77,8 @@ namespace User.UI
             DependencyProperty.Register("Value", typeof(ColorP), typeof(ColorPicker), new PropertyMetadata(new ColorP(Colors.Red), new PropertyChangedCallback(Value_Changed)));
         public static readonly DependencyProperty ValueOldProperty =
             DependencyProperty.Register("ValueOld", typeof(ColorP), typeof(ColorPicker), new PropertyMetadata(new ColorP(Colors.Red), new PropertyChangedCallback(ValueOld_Changed)));
-        public event PropertyChangedEventHander<ColorP> ChooseOkOrCancel;
-        public event PropertyChangedEventHander<ColorP> ValueChanged;
+        public event UPropertyChangedEventHandler<ColorP> ChooseOkOrCancel;
+        public event UPropertyChangedEventHandler<ColorP> ValueChanged;
 
         private void SlideBarL_SlideValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
@@ -150,7 +150,7 @@ namespace User.UI
             TbxG.Text = color.G.ToString();
             TbxB.Text = color.B.ToString();
             BdrColorCurrent.Background = new SolidColorBrush(color);
-            ValueChanged?.Invoke(this, new PropertyChangedEventargs<ColorP>(ColorP.Empty, Value));
+            ValueChanged?.Invoke(this, new UPropertyChangedEventArgs<ColorP>(ColorP.Empty, Value));
         }
         void OnValueOldChanged()
         {
@@ -273,7 +273,7 @@ namespace User.UI
             ValueOld = Value;
             if (isEvent)
             {
-                ChooseOkOrCancel?.Invoke(this, new PropertyChangedEventargs<ColorP>(ValueOld, Value));
+                ChooseOkOrCancel?.Invoke(this, new UPropertyChangedEventArgs<ColorP>(ValueOld, Value));
             }
         }
         private void SetColorOld(bool isEvent = true)
@@ -281,7 +281,7 @@ namespace User.UI
             Value = ValueOld;
             if (isEvent)
             {
-                ChooseOkOrCancel?.Invoke(this, new PropertyChangedEventargs<ColorP>(Value, ValueOld));
+                ChooseOkOrCancel?.Invoke(this, new UPropertyChangedEventArgs<ColorP>(Value, ValueOld));
             }
         }
     }

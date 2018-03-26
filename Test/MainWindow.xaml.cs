@@ -34,7 +34,7 @@ namespace Test
             Area.uSettings.ReSet(true);
         }
 
-        private void USettings_USettingsChanged(USettingsProperty key, PropertyChangedEventargs e)
+        private void USettings_USettingsChanged(USettingsProperty key, UPropertyChangedEventArgs e)
         {
             Console.WriteLine(key.Name + e.NewValue);
         }
@@ -52,7 +52,10 @@ namespace Test
 
         private void TriggerImage_Tapped(object sender, RoutedEventArgs e)
         {
-            QB1.IsOpened = !QB1.IsOpened;
+            foreach (var item in User.SoftWare.Service.Weatherwebxml.Test("杭州"))
+            {
+                Console.WriteLine(item);
+            }
         }
     }
 

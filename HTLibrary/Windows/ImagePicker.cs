@@ -244,7 +244,7 @@ namespace User.Windows
     /// <summary>
     /// 屏幕检测的单个属性,只能由 ScreenMonitor 注册而来.
     /// </summary>
-    public class ScreenMonitorProperty:System.ComponentModel.INotifyPropertyChanged
+    public class ScreenMonitorProperty:INotifyPropertyChanged
     {
         bool? isRelativeDark = null;
         Window window;
@@ -259,7 +259,7 @@ namespace User.Windows
                 {
                     isRelativeDark = value;
                     IsRelativeDarkChanged?.Invoke(this, new IsRelativeDarkChangedEventargs(window, value));
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsRelativeDark"));
+                    PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs("IsRelativeDark"));
                 }
                 else
                 {
@@ -268,12 +268,13 @@ namespace User.Windows
             }
         }
         public event EventHandler<IsRelativeDarkChangedEventargs> IsRelativeDarkChanged;
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
 
         internal ScreenMonitorProperty(Window window)
         {
             this.window = window;
         }
+
     }
     /// <summary>
     /// 当背景的亮色或暗色发生改变时触发的数据.

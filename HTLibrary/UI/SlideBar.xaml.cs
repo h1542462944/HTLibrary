@@ -13,19 +13,21 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using User;
 
 namespace User.UI
 {
     /// <summary>
     /// SlideBar.xaml 的交互逻辑
     /// </summary>
-    public partial class SlideBar : UControl
+    public partial class SlideBar : UControl,INotifyPropertyChanged
     {
         public SlideBar()
         {
             this.Focusable = true;
             InitializeComponent();
         }
+
 
         bool isLeftMouseDown = false;
         private double slideValueOld = double.NaN;
@@ -92,7 +94,7 @@ namespace User.UI
         /// SlideValue发生变化.
         /// </summary>
         public event RoutedPropertyChangedEventHandler<double> SlideValueChanged;
-        private event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnSlideValueChanged()
         {
