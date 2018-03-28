@@ -54,6 +54,12 @@
     <Compile Include="IO\SyncDir.cs" />
     <Compile Include="IO\UsbCopyer.cs" />
     <Compile Include="IO\UserIO.cs" />
+    <Compile Include="Math\Lambda\Common.cs" />
+    <Compile Include="Math\Lambda\EqualComparer.cs" />
+    <Compile Include="Math\Lambda\ExpressionParser.cs" />
+    <Compile Include="Math\Lambda\LambdaParser.cs" />
+    <Compile Include="Math\Lambda\StringParser.cs" />
+    <Compile Include="Math\Lambda\TypeParser.cs" />
     <Compile Include="Math\Virtualnumber.cs" />
     <Compile Include="NetWork\NetWorkAdapter.cs" />
     <Compile Include="NetWork\NetWorkMonitor.cs" />

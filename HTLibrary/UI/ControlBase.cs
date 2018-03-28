@@ -51,11 +51,11 @@ namespace User.UI
         {
             if (percent <= 0)
             {
-                return new SolidColorBrush(color1);
+                return new SolidColorBrush(color2);
             }
             else if (percent >= 1)
             {
-                return new SolidColorBrush(color2);
+                return new SolidColorBrush(color1);
             }
             else
             {
