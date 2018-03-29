@@ -5,15 +5,16 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Xml.Linq;
+using System.Globalization;
 
 namespace User
 {
-    public static  class Tools
+    public static class Tools
     {
         public static System.Windows.Point GetMousePosition()
         {
             System.Drawing.Point point = System.Windows.Forms.Control.MousePosition;
-            return new System.Windows.Point(point.X / Windows.PrimaryScreen.ScaleX , point.Y  / Windows.PrimaryScreen.ScaleY);
+            return new System.Windows.Point(point.X / Windows.PrimaryScreen.ScaleX, point.Y / Windows.PrimaryScreen.ScaleY);
         }
         public static string ShortTimeStringInvoke(string hour, string minute)
         {
@@ -53,8 +54,7 @@ namespace User
         }
         public static string Add0(string arg, int length)
         {
-            string t = "0000000000";
-            return t.Substring(0, length - arg.Length) + arg;
+            return new string('0', length - arg.Length) + arg;
         }
         public static double Checkdouble(double value, double min, double max)
         {
@@ -95,17 +95,29 @@ namespace User
     }
     public static class Extension
     {
+       
         public static string GetDateString(this DateTime arg)
         {
             string[] ts = arg.ToShortDateString().Split('/');
             return string.Format("{0}{1}{2}", Tools.Add0(ts[0], 4), Tools.Add0(ts[1], 2), Tools.Add0(ts[2], 2));
+        }
+        public static string GetDayOfWeekString(this DateTime arg)
+        {
+            string[] dayOfWeekString = new string[] { "周日", "周一", "周二", "周三", "周四", "周五", "周六" };
+            return dayOfWeekString[(int)arg.DayOfWeek];
+        }
+        public static int WeekOfYear(this DateTime arg,CalendarWeekRule rule= CalendarWeekRule.FirstDay,DayOfWeek firstDayOfWeek = DayOfWeek.Sunday)
+        {
+            CultureInfo culture = new CultureInfo("zh-CN");
+            System.Globalization.Calendar cal = culture.Calendar;
+            return cal.GetWeekOfYear(arg, rule, firstDayOfWeek);
         }
         public static Type GetMemberType(this Type arg)
         {
             Type result = arg.GetElementType();
             return result;
         }
-        public static void Save(this BitmapImage arg,string filepath)
+        public static void Save(this BitmapImage arg, string filepath)
         {
             BitmapEncoder encoder = new PngBitmapEncoder();
             encoder.Frames.Add(BitmapFrame.Create(arg));
@@ -114,6 +126,7 @@ namespace User
                 encoder.Save(fs);
             }
         }
+
     }
     /// <summary>
     /// 基础Xml服务

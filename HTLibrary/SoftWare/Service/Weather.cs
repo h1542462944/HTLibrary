@@ -157,7 +157,9 @@ namespace User.SoftWare.Service
             return string.Format("{0} {1} {2} {3} {4} {5} {6} {7} ", Date, Uppertemperature, Lowertemperature, Dayweather, Daywinddestination, Daywindpower, Nightweather, Nightwinddestination, Nightwindpower);
         }
     }
-
+    /// <summary>
+    /// 天气类,由<see cref="WeatherForcastInfo"/>储存信息.
+    /// </summary>
     public class Weatherwebxml
     {
         static DateTime lastTime = new DateTime();
@@ -165,6 +167,10 @@ namespace User.SoftWare.Service
         public static WeatherForcastInfo[] Weather { get; private set; }
         public static string City { get; private set; }
         public static event Action Completed;
+        /// <summary>
+        /// 加载信息.
+        /// </summary>
+        /// <param name="city">城市</param>
         public static void Load(string city)
         {
             if (DateTime.Now - lastTime > TimeSpan.FromHours(1))
@@ -173,9 +179,9 @@ namespace User.SoftWare.Service
                 string[] s = weatherservice.getWeatherbyCityName(city);
                 DateTime updateTime = DateTime.Parse(s[4]);
                 WeatherForcastInfo[] weatherinfo = new WeatherForcastInfo[3];
-                weatherinfo[0] = new WeatherForcastInfo(DateTime.Today, GetWeather(s[6]), GetTemp(s[5]));
-                weatherinfo[1] = new WeatherForcastInfo(DateTime.Today.AddDays(1), GetWeather(s[13]), GetTemp(s[12]));
-                weatherinfo[2] = new WeatherForcastInfo(DateTime.Today.AddDays(2), GetWeather(s[18]), GetTemp(s[17]));
+                weatherinfo[0] = new WeatherForcastInfo(GetDate(s[6]), GetWeather(s[6]), GetTemp(s[5]));
+                weatherinfo[1] = new WeatherForcastInfo(GetDate(s[13]), GetWeather(s[13]), GetTemp(s[12]));
+                weatherinfo[2] = new WeatherForcastInfo(GetDate(s[18]), GetWeather(s[18]), GetTemp(s[17]));
 
                 City = s[1];
                 UpdateTime = updateTime;
@@ -201,7 +207,7 @@ namespace User.SoftWare.Service
             int i = 0;
             foreach (var item in arg)
             {
-                if ((item >= '0' && item <= '9') || item =='-')
+                if ((item >= '0' && item <= '9') || item == '-')
                 {
                     ts[i] += item;
                 }
@@ -216,6 +222,30 @@ namespace User.SoftWare.Service
         {
             return arg.Split(' ')[1];
         }
+        private static DateTime GetDate(string arg)
+        {
+            string t = arg.Split(' ')[0];
+            string[] ts = new string[2];
+            int i = -1;
+            bool flag = false;
+            foreach (var x in t)
+            {
+                if (x >= '0' && x <= '9')
+                {
+                    if (!flag)
+                    {
+                        i++;
+                        flag = true;
+                    }
+                    ts[i] += x;
+                }
+                else
+                {
+                    flag = false;
+                }
+            }
+            return new DateTime(DateTime.Today.Year, int.Parse(ts[0]), int.Parse(ts[1]));
+        }
     }
     public struct WeatherForcastInfo
     {
@@ -227,14 +257,14 @@ namespace User.SoftWare.Service
             UpperTemp = temp[1];
         }
 
-        public DateTime Time { get;private set; }
+        public DateTime Time { get; private set; }
         public string Weather { get; private set; }
         public int LowerTemp { get; private set; }
         public int UpperTemp { get; private set; }
 
         public override string ToString()
         {
-            return string.Format("{0} {1} {2}-{3}", Time.ToShortDateString(), Weather, LowerTemp, UpperTemp);
+            return string.Format("{0} {1} {2}-{3}", Time.GetDayOfWeekString(), Weather, LowerTemp, UpperTemp);
         }
     }
 }

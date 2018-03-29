@@ -26,9 +26,16 @@ namespace User.SoftWare.Service
             return string.Format("更新于{0}\n{1}\n{2}\n{3}",Weatherwebxml.UpdateTime,Weatherwebxml.Weather[0]
                     ,Weatherwebxml.Weather[1],Weatherwebxml.Weather[2]);
         }
-        public async Task LoadWeather()
+        public async Task LoadWeatherAsync()
         {
             await Weatherwebxml.LoadAsync(City);
+        }
+        /// <summary>
+        /// 加载天气,由<see cref="Weatherwebxml"/>提供信息.
+        /// </summary>
+        public void LoadWeather()
+        {
+            Weatherwebxml.Load(City);
         }
     }
 }

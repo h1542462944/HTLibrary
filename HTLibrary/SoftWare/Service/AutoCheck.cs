@@ -45,6 +45,15 @@ namespace User.SoftWare.Service
     public class AutoCheckCollection : ICollection<AutoCheck>,IUSettingsConvertArray
     {
         List<AutoCheck> list = new List<AutoCheck>();
+
+        public AutoCheckCollection()
+        {
+        }
+
+        public AutoCheckCollection(params AutoCheck[] checks)
+        {
+            this.list = checks.ToList();
+        }
         public int Count => list.Count;
         public bool IsReadOnly => false;
 
@@ -75,7 +84,7 @@ namespace User.SoftWare.Service
         }
         public IUSettingsConvertArray USettingsConvertArray(object[] contents)
         {
-            return new AutoCheckCollection { list = new List<AutoCheck>((AutoCheck[])contents[0])};
+            return new AutoCheckCollection((AutoCheck[])contents[0]);
         }
         public object[] USettingsConvertArray()
         {
