@@ -71,6 +71,7 @@
     <Compile Include="PropertyChangedEvent.cs" />
     <Compile Include="SoftWare\Service\AutoCheck.cs" />
     <Compile Include="SoftWare\Service\AutoText.cs" />
+    <Compile Include="SoftWare\Service\SoftWareService.cs" />
     <Compile Include="SoftWare\Service\WeatherText.cs" />
     <Compile Include="SoftWare\ULogger.cs" />
     <Compile Include="SoftWare\USettings.cs" />
@@ -89,6 +90,11 @@
     <Compile Include="UI\DragWindow.cs" />
     <Compile Include="UI\TriggerButton.xaml.cs">
       <DependentUpon>TriggerButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\HTStudioService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
     </Compile>
     <Compile Include="Web References\WeatherService\Reference.cs">
       <AutoGen>True</AutoGen>
@@ -158,6 +164,17 @@
     <WebReferences Include="Web References\" />
   </ItemGroup>
   <ItemGroup>
+    <WebReferenceUrl Include="http://localhost:52623/HTStudioService.svc">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\HTStudioService\</RelPath>
+      <UpdateFromURL>http://localhost:52623/HTStudioService.svc</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>HTLibrary_HTStudioService_HTStudioService</CachedSettingsPropName>
+    </WebReferenceUrl>
     <WebReferenceUrl Include="http://www.webxml.com.cn/WebServices/WeatherWebService.asmx">
       <UrlBehavior>Dynamic</UrlBehavior>
       <RelPath>Web References\WeatherService\</RelPath>
@@ -176,6 +193,35 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="Web References\HTStudioService\CompositeType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\HTStudioService\DownloadResult.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\HTStudioService\DownloadTask.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\HTStudioService\ExtendedPath.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\HTStudioService\HTStudioService.wsdl" />
+    <None Include="Web References\HTStudioService\HTStudioService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\HTStudioService\HTStudioService0.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\HTStudioService\HTStudioService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\HTStudioService\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\HTStudioService\UpdateType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
     <None Include="Web References\WeatherService\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
@@ -184,6 +230,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Web References\WeatherService\WeatherWebService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Web References\HTStudioService\HTStudioService.disco" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

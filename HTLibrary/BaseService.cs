@@ -92,6 +92,11 @@ namespace User
                 return false;
             }
         }
+        public static string GetRelativePath(string full, string root)
+        {
+            return full.Substring(root.Length, full.Length - root.Length);
+        }
+
     }
     public static class Extension
     {
