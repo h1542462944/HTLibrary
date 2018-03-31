@@ -41,6 +41,8 @@ namespace User.HTStudioService {
         
         private System.Threading.SendOrPostCallback CheckUpdateOperationCompleted;
         
+        private System.Threading.SendOrPostCallback GetSoftWareVersionOperationCompleted;
+        
         private System.Threading.SendOrPostCallback GetUpdateTaskOperationCompleted;
         
         private bool useDefaultCredentialsSetExplicitly;
@@ -98,6 +100,9 @@ namespace User.HTStudioService {
         
         /// <remarks/>
         public event CheckUpdateCompletedEventHandler CheckUpdateCompleted;
+        
+        /// <remarks/>
+        public event GetSoftWareVersionCompletedEventHandler GetSoftWareVersionCompleted;
         
         /// <remarks/>
         public event GetUpdateTaskCompletedEventHandler GetUpdateTaskCompleted;
@@ -285,6 +290,36 @@ namespace User.HTStudioService {
             if ((this.CheckUpdateCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.CheckUpdateCompleted(this, new CheckUpdateCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/IHTStudioService/GetSoftWareVersion", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [return: System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public string GetSoftWareVersion([System.Xml.Serialization.XmlElementAttribute(IsNullable=true)] string softWareName) {
+            object[] results = this.Invoke("GetSoftWareVersion", new object[] {
+                        softWareName});
+            return ((string)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void GetSoftWareVersionAsync(string softWareName) {
+            this.GetSoftWareVersionAsync(softWareName, null);
+        }
+        
+        /// <remarks/>
+        public void GetSoftWareVersionAsync(string softWareName, object userState) {
+            if ((this.GetSoftWareVersionOperationCompleted == null)) {
+                this.GetSoftWareVersionOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetSoftWareVersionOperationCompleted);
+            }
+            this.InvokeAsync("GetSoftWareVersion", new object[] {
+                        softWareName}, this.GetSoftWareVersionOperationCompleted, userState);
+        }
+        
+        private void OnGetSoftWareVersionOperationCompleted(object arg) {
+            if ((this.GetSoftWareVersionCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.GetSoftWareVersionCompleted(this, new GetSoftWareVersionCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -758,6 +793,32 @@ namespace User.HTStudioService {
             get {
                 this.RaiseExceptionIfNecessary();
                 return ((bool)(this.results[1]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    public delegate void GetSoftWareVersionCompletedEventHandler(object sender, GetSoftWareVersionCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class GetSoftWareVersionCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal GetSoftWareVersionCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public string Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((string)(this.results[0]));
             }
         }
     }

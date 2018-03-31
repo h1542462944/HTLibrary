@@ -43,6 +43,12 @@
   <wsdl:message name="IHTStudioService_CheckUpdate_OutputMessage">
     <wsdl:part name="parameters" element="tns:CheckUpdateResponse" />
   </wsdl:message>
+  <wsdl:message name="IHTStudioService_GetSoftWareVersion_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetSoftWareVersion" />
+  </wsdl:message>
+  <wsdl:message name="IHTStudioService_GetSoftWareVersion_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetSoftWareVersionResponse" />
+  </wsdl:message>
   <wsdl:message name="IHTStudioService_GetUpdateTask_InputMessage">
     <wsdl:part name="parameters" element="tns:GetUpdateTask" />
   </wsdl:message>
@@ -73,6 +79,10 @@
     <wsdl:operation name="CheckUpdate">
       <wsdl:input wsaw:Action="http://tempuri.org/IHTStudioService/CheckUpdate" message="tns:IHTStudioService_CheckUpdate_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IHTStudioService/CheckUpdateResponse" message="tns:IHTStudioService_CheckUpdate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSoftWareVersion">
+      <wsdl:input wsaw:Action="http://tempuri.org/IHTStudioService/GetSoftWareVersion" message="tns:IHTStudioService_GetSoftWareVersion_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IHTStudioService/GetSoftWareVersionResponse" message="tns:IHTStudioService_GetSoftWareVersion_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetUpdateTask">
       <wsdl:input wsaw:Action="http://tempuri.org/IHTStudioService/GetUpdateTask" message="tns:IHTStudioService_GetUpdateTask_InputMessage" />
@@ -128,6 +138,15 @@
     </wsdl:operation>
     <wsdl:operation name="CheckUpdate">
       <soap:operation soapAction="http://tempuri.org/IHTStudioService/CheckUpdate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSoftWareVersion">
+      <soap:operation soapAction="http://tempuri.org/IHTStudioService/GetSoftWareVersion" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

@@ -47,7 +47,7 @@ namespace SoftWareServiceTest
         }
         private static void SoftWareService_CheckUpdateCompleted(object sender, CheckUpdateEventArgs e)
         {
-            Console.WriteLine("check:{0},{1},{2}", e.ChannelState,e.UpdateType,e.Length);
+            Console.WriteLine("check:{0},{1},{2},{3}", e.ChannelState,e.UpdateType,e.Length,e.Version);
         }
     }
 }

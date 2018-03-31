@@ -38,6 +38,7 @@ namespace User.SoftWare.Service
                     return;
                 }
                 service.CheckUpdate(SoftWareName, Version.ToString(), out UpdateType type, out bool m);
+                string version = service.GetSoftWareVersion(SoftWareName);
                 long size = 0;
                 if (type == UpdateType.Download)
                 {
@@ -48,7 +49,7 @@ namespace User.SoftWare.Service
                     }
 
                 }
-                CheckUpdateCompleted?.Invoke(this, new CheckUpdateEventArgs(ChannelState.Completed, type, size));
+                CheckUpdateCompleted?.Invoke(this, new CheckUpdateEventArgs(ChannelState.Completed, type,version, size));
             }
             catch (Exception)
             {
@@ -140,22 +141,17 @@ namespace User.SoftWare.Service
         {
             ChannelState = channelState;
         }
-
-        public CheckUpdateEventArgs(UpdateType updateType, long length)
-        {
-            UpdateType = updateType;
-            Length = length;
-
-        }
-        public CheckUpdateEventArgs(ChannelState channelState, UpdateType updateType, long length)
+        public CheckUpdateEventArgs(ChannelState channelState, UpdateType updateType,string version, long length)
         {
             ChannelState = channelState;
             UpdateType = updateType;
+            Version = version;
             Length = length;
         }
 
         public ChannelState ChannelState { get; private set; } = ChannelState.Completed;
         public UpdateType UpdateType { get; private set; }
+        public string Version { get; private set; }
         public long Length { get; private set; }
     }
     public delegate void ChannelFreshEventHandler(object sender, ChannelFreshEventArgs e);
