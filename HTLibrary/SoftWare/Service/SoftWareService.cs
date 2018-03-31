@@ -47,7 +47,6 @@ namespace User.SoftWare.Service
                     {
                         size += item.Size;
                     }
-
                 }
                 CheckUpdateCompleted?.Invoke(this, new CheckUpdateEventArgs(ChannelState.Completed, type,version, size));
             }
