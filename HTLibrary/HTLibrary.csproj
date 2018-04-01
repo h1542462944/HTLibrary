@@ -71,6 +71,8 @@
     <Compile Include="PropertyChangedEvent.cs" />
     <Compile Include="SoftWare\Service\AutoCheck.cs" />
     <Compile Include="SoftWare\Service\AutoText.cs" />
+    <Compile Include="SoftWare\Service\Notification.cs" />
+    <Compile Include="SoftWare\Service\NotificationInfo.cs" />
     <Compile Include="SoftWare\Service\SoftWareService.cs" />
     <Compile Include="SoftWare\Service\WeatherText.cs" />
     <Compile Include="SoftWare\ULogger.cs" />

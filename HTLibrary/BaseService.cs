@@ -96,7 +96,6 @@ namespace User
         {
             return full.Substring(root.Length, full.Length - root.Length);
         }
-
     }
     public static class Extension
     {
@@ -111,7 +110,7 @@ namespace User
             string[] dayOfWeekString = new string[] { "周日", "周一", "周二", "周三", "周四", "周五", "周六" };
             return dayOfWeekString[(int)arg.DayOfWeek];
         }
-        public static int WeekOfYear(this DateTime arg,CalendarWeekRule rule= CalendarWeekRule.FirstDay,DayOfWeek firstDayOfWeek = DayOfWeek.Sunday)
+        public static int GetWeekOfYear(this DateTime arg,CalendarWeekRule rule= CalendarWeekRule.FirstDay,DayOfWeek firstDayOfWeek = DayOfWeek.Sunday)
         {
             CultureInfo culture = new CultureInfo("zh-CN");
             System.Globalization.Calendar cal = culture.Calendar;
@@ -131,7 +130,25 @@ namespace User
                 encoder.Save(fs);
             }
         }
-
+        public static string ToFriendString(this DateTime arg)
+        {
+            if (arg.Date == DateTime.Today)
+            {
+                return string.Format("{0}:{1}", arg.Hour, arg.Minute);
+            }
+            else if (DateTime.Today - arg.Date < TimeSpan.FromDays(7))
+            {
+                return arg.GetDayOfWeekString();
+            }
+            else if (DateTime.Today.Year == arg.Year)
+            {
+                return string.Format("{0}月{1}日",arg.Month,arg.Day);
+            }
+            else
+            {
+                return arg.ToLongDateString();
+            }
+        }
     }
     /// <summary>
     /// 基础Xml服务

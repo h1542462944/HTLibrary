@@ -17,7 +17,8 @@ namespace User.SoftWare.Service
         }
         public Version Version { get; private set; }
         public string SoftWareName { get; private set; }
-        public string Folder { get; set; } = AppDomain.CurrentDomain.BaseDirectory + @"SoftWareCache\";
+        public string Root { get; set; } = AppDomain.CurrentDomain.BaseDirectory;
+        public string Folder => Root + @"SoftWareCache\";
         public string UpdateFolder => Folder + @"Update\";
         public string UpdateBackupFolder => Folder + @"UpdateBackup";
         HTStudioService.HTStudioService service = new HTStudioService.HTStudioService();
@@ -25,6 +26,7 @@ namespace User.SoftWare.Service
 
         public event CheckUpdateEventHandler CheckUpdateCompleted;
         public event ChannelFreshEventHandler ChannelFreshed;
+        public event EventHandler<bool> UpdateCompleted;
 
         /// <summary>
         /// 检查更新,触发<see cref="CheckUpdateCompleted"/>事件.
@@ -48,7 +50,7 @@ namespace User.SoftWare.Service
                         size += item.Size;
                     }
                 }
-                CheckUpdateCompleted?.Invoke(this, new CheckUpdateEventArgs(ChannelState.Completed, type,version, size));
+                CheckUpdateCompleted?.Invoke(this, new CheckUpdateEventArgs(ChannelState.Completed, type, version, size));
             }
             catch (Exception)
             {
@@ -82,7 +84,7 @@ namespace User.SoftWare.Service
                         for (int i = 0; i < item.Num; i++)
                         {
                             fs.Position = i * 1024;
-                            foreach (var d in service.Download(item,i,true).Data)
+                            foreach (var d in service.Download(item, i, true).Data)
                             {
                                 fs.WriteByte(d);
                                 p++;
@@ -108,12 +110,24 @@ namespace User.SoftWare.Service
         /// </summary>
         public void ApplyUpdate()
         {
-            foreach (var item in new DirectoryInfo(UpdateFolder).GetFiles())
+            try
             {
-                string newpath = AppDomain.CurrentDomain.BaseDirectory + Tools.GetRelativePath(item.FullName, UpdateFolder);
-
+                foreach (var item in new DirectoryInfo(UpdateFolder).GetFiles())
+                {
+                    string newpath = Root + Tools.GetRelativePath(item.FullName, UpdateFolder);
+                    if (Tools.GetRelativePath(item.FullName, UpdateFolder) != "UpdateInfo.txt")
+                    {
+                        File.Copy(item.FullName, newpath, true);
+                        File.Delete(item.FullName);
+                    }
+                }
+                File.Delete(UpdateFolder + "UpdateInfo.txt");
+            }
+            catch (Exception)
+            {
 
             }
+            UpdateCompleted?.Invoke(this, true);
         }
         bool CheckHasDownload()
         {
@@ -140,7 +154,7 @@ namespace User.SoftWare.Service
         {
             ChannelState = channelState;
         }
-        public CheckUpdateEventArgs(ChannelState channelState, UpdateType updateType,string version, long length)
+        public CheckUpdateEventArgs(ChannelState channelState, UpdateType updateType, string version, long length)
         {
             ChannelState = channelState;
             UpdateType = updateType;
