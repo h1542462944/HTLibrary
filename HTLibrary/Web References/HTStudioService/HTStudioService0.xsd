@@ -114,4 +114,46 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="GetNotificationInfo">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetNotificationInfoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/HTStudioService" minOccurs="0" name="GetNotificationInfoResult" nillable="true" type="q9:NotificationInfo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetNotificationInfos">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="softWareName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="time" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetNotificationInfosResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/HTStudioService" minOccurs="0" name="GetNotificationInfosResult" nillable="true" type="q10:ArrayOfNotificationInfo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ApplyNotification">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="softWareName" nillable="true" type="xs:string" />
+        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/HTStudioService" minOccurs="0" name="info" nillable="true" type="q11:NotificationInfo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ApplyNotificationResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="ApplyNotificationResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

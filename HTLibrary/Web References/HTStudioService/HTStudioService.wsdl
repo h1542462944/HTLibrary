@@ -55,6 +55,24 @@
   <wsdl:message name="IHTStudioService_GetUpdateTask_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetUpdateTaskResponse" />
   </wsdl:message>
+  <wsdl:message name="IHTStudioService_GetNotificationInfo_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetNotificationInfo" />
+  </wsdl:message>
+  <wsdl:message name="IHTStudioService_GetNotificationInfo_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetNotificationInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHTStudioService_GetNotificationInfos_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetNotificationInfos" />
+  </wsdl:message>
+  <wsdl:message name="IHTStudioService_GetNotificationInfos_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetNotificationInfosResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHTStudioService_ApplyNotification_InputMessage">
+    <wsdl:part name="parameters" element="tns:ApplyNotification" />
+  </wsdl:message>
+  <wsdl:message name="IHTStudioService_ApplyNotification_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ApplyNotificationResponse" />
+  </wsdl:message>
   <wsdl:portType name="IHTStudioService">
     <wsdl:operation name="GetData">
       <wsdl:input wsaw:Action="http://tempuri.org/IHTStudioService/GetData" message="tns:IHTStudioService_GetData_InputMessage" />
@@ -87,6 +105,18 @@
     <wsdl:operation name="GetUpdateTask">
       <wsdl:input wsaw:Action="http://tempuri.org/IHTStudioService/GetUpdateTask" message="tns:IHTStudioService_GetUpdateTask_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IHTStudioService/GetUpdateTaskResponse" message="tns:IHTStudioService_GetUpdateTask_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetNotificationInfo">
+      <wsdl:input wsaw:Action="http://tempuri.org/IHTStudioService/GetNotificationInfo" message="tns:IHTStudioService_GetNotificationInfo_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IHTStudioService/GetNotificationInfoResponse" message="tns:IHTStudioService_GetNotificationInfo_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetNotificationInfos">
+      <wsdl:input wsaw:Action="http://tempuri.org/IHTStudioService/GetNotificationInfos" message="tns:IHTStudioService_GetNotificationInfos_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IHTStudioService/GetNotificationInfosResponse" message="tns:IHTStudioService_GetNotificationInfos_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ApplyNotification">
+      <wsdl:input wsaw:Action="http://tempuri.org/IHTStudioService/ApplyNotification" message="tns:IHTStudioService_ApplyNotification_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IHTStudioService/ApplyNotificationResponse" message="tns:IHTStudioService_ApplyNotification_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IHTStudioService" type="tns:IHTStudioService">
@@ -156,6 +186,33 @@
     </wsdl:operation>
     <wsdl:operation name="GetUpdateTask">
       <soap:operation soapAction="http://tempuri.org/IHTStudioService/GetUpdateTask" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetNotificationInfo">
+      <soap:operation soapAction="http://tempuri.org/IHTStudioService/GetNotificationInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetNotificationInfos">
+      <soap:operation soapAction="http://tempuri.org/IHTStudioService/GetNotificationInfos" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ApplyNotification">
+      <soap:operation soapAction="http://tempuri.org/IHTStudioService/ApplyNotification" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

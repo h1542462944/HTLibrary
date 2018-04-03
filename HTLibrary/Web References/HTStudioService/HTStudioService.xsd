@@ -46,4 +46,20 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfDownloadTask" nillable="true" type="tns:ArrayOfDownloadTask" />
+  <xs:complexType name="NotificationInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Button" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ButtonEvent" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DateTime" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Title" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="NotificationInfo" nillable="true" type="tns:NotificationInfo" />
+  <xs:complexType name="ArrayOfNotificationInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="NotificationInfo" nillable="true" type="tns:NotificationInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfNotificationInfo" nillable="true" type="tns:ArrayOfNotificationInfo" />
 </xs:schema>

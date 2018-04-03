@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using User.HTStudioService;
 using User.SoftWare.Service;
 
 namespace SoftWareServiceTest
@@ -12,7 +13,7 @@ namespace SoftWareServiceTest
         static string code = "";
         static void Main(string[] args)
         {
-            SoftWareService softWareService = new SoftWareService(Version.Parse("1.0.0.0"), "Edit_Community");
+            SoftWareService softWareService = new SoftWareService(Version.Parse("1.3.5.0"), "Edit_Community");
             softWareService.CheckUpdateCompleted += SoftWareService_CheckUpdateCompleted;
             softWareService.ChannelFreshed += SoftWareService_ChannelFreshed;
             while (!IsExitCode(Console.ReadLine()))
@@ -24,6 +25,14 @@ namespace SoftWareServiceTest
                 else if (code =="download")
                 {
                     softWareService.DownloadUpdate();
+                }
+                else if (code =="print")
+                {
+                    DownloadTask[] downloadTask = softWareService.GetTask();
+                    foreach (var item in downloadTask)
+                    {
+                        Console.WriteLine("{0}{1}{2}" ,item.ExtendedPath.Root,item.ExtendedPath.Middle,item.ExtendedPath.Last);
+                    }
                 }
             }
         }

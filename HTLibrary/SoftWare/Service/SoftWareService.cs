@@ -21,6 +21,7 @@ namespace User.SoftWare.Service
         public string Folder => Root + @"SoftWareCache\";
         public string UpdateFolder => Folder + @"Update\";
         public string UpdateBackupFolder => Folder + @"UpdateBackup";
+        bool IsDownloading { get; set; } = false;
         HTStudioService.HTStudioService service = new HTStudioService.HTStudioService();
         DownloadTask[] CurrentTask { get; set; }
 
@@ -62,47 +63,51 @@ namespace User.SoftWare.Service
         /// </summary>
         public void DownloadUpdate()
         {
-            try
+            if (!IsDownloading)
             {
-                if (CheckHasDownload())
+                IsDownloading = true;
+                try
                 {
-                    return;
-                }
-                CheckHasDownload();
-                long p = 0;
-                long size = 0;
-                DownloadTask[] task = service.GetUpdateTask(SoftWareName, Version.ToString());
-                foreach (var item in task)
-                {
-                    size += item.Size;
-                }
-                foreach (var item in task)
-                {
-                    Directory.CreateDirectory(Path.GetDirectoryName(UpdateFolder + item.ExtendedPath.Last));
-                    using (FileStream fs = new FileStream(UpdateFolder + item.ExtendedPath.Last, FileMode.Create))
+                    if (CheckHasDownload())
                     {
-                        for (int i = 0; i < item.Num; i++)
+                        return;
+                    }
+                    long p = 0;
+                    long size = 0;
+                    DownloadTask[] task = service.GetUpdateTask(SoftWareName, Version.ToString());
+                    foreach (var item in task)
+                    {
+                        size += item.Size;
+                    }
+                    foreach (var item in task)
+                    {
+                        Directory.CreateDirectory(Path.GetDirectoryName(UpdateFolder + item.ExtendedPath.Last));
+                        using (FileStream fs = new FileStream(UpdateFolder + item.ExtendedPath.Last, FileMode.Create))
                         {
-                            fs.Position = i * 1024;
-                            foreach (var d in service.Download(item, i, true).Data)
+                            for (int i = 0; i < item.Num; i++)
                             {
-                                fs.WriteByte(d);
-                                p++;
+                                fs.Position = i * 1024;
+                                foreach (var d in service.Download(item, i, true).Data)
+                                {
+                                    fs.WriteByte(d);
+                                    p++;
+                                }
+                                ChannelFreshed?.Invoke(this, new ChannelFreshEventArgs(ChannelState.Doing, p, size));
                             }
-                            ChannelFreshed?.Invoke(this, new ChannelFreshEventArgs(ChannelState.Doing, p, size));
                         }
                     }
+                    ChannelFreshed?.Invoke(this, new ChannelFreshEventArgs(ChannelState.Completed));
+                    File.WriteAllText(UpdateFolder + "UpdateInfo.txt", Version.ToString());
                 }
-                ChannelFreshed?.Invoke(this, new ChannelFreshEventArgs(ChannelState.Completed));
-                File.WriteAllText(UpdateFolder + "UpdateInfo.txt", Version.ToString());
-            }
-            catch (IOException)
-            {
-                ChannelFreshed?.Invoke(this, new ChannelFreshEventArgs(ChannelState.FileFailed));
-            }
-            catch (Exception)
-            {
-                ChannelFreshed?.Invoke(this, new ChannelFreshEventArgs(ChannelState.Failed));
+                catch (IOException)
+                {
+                    ChannelFreshed?.Invoke(this, new ChannelFreshEventArgs(ChannelState.FileFailed));
+                }
+                catch (Exception)
+                {
+                    ChannelFreshed?.Invoke(this, new ChannelFreshEventArgs(ChannelState.Failed));
+                }
+                IsDownloading = false;
             }
         }
         /// <summary>
@@ -138,12 +143,17 @@ namespace User.SoftWare.Service
                 {
                     if (v >= Version)
                     {
+                        CheckUpdateCompleted?.Invoke(this, new CheckUpdateEventArgs(ChannelState.Completed, UpdateType.Download, s, 0));
                         ChannelFreshed?.Invoke(this, new ChannelFreshEventArgs(ChannelState.Completed));
                         return true;
                     }
                 }
             }
             return false;
+        }
+        public DownloadTask[] GetTask()
+        {
+            return service.GetUpdateTask(SoftWareName, Version.ToString());
         }
     }
 

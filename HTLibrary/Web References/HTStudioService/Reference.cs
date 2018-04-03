@@ -45,6 +45,12 @@ namespace User.HTStudioService {
         
         private System.Threading.SendOrPostCallback GetUpdateTaskOperationCompleted;
         
+        private System.Threading.SendOrPostCallback GetNotificationInfoOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback GetNotificationInfosOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback ApplyNotificationOperationCompleted;
+        
         private bool useDefaultCredentialsSetExplicitly;
         
         /// <remarks/>
@@ -106,6 +112,15 @@ namespace User.HTStudioService {
         
         /// <remarks/>
         public event GetUpdateTaskCompletedEventHandler GetUpdateTaskCompleted;
+        
+        /// <remarks/>
+        public event GetNotificationInfoCompletedEventHandler GetNotificationInfoCompleted;
+        
+        /// <remarks/>
+        public event GetNotificationInfosCompletedEventHandler GetNotificationInfosCompleted;
+        
+        /// <remarks/>
+        public event ApplyNotificationCompletedEventHandler ApplyNotificationCompleted;
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/IHTStudioService/GetData", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
@@ -357,6 +372,101 @@ namespace User.HTStudioService {
         }
         
         /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/IHTStudioService/GetNotificationInfo", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [return: System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public NotificationInfo GetNotificationInfo() {
+            object[] results = this.Invoke("GetNotificationInfo", new object[0]);
+            return ((NotificationInfo)(results[0]));
+        }
+        
+        /// <remarks/>
+        public void GetNotificationInfoAsync() {
+            this.GetNotificationInfoAsync(null);
+        }
+        
+        /// <remarks/>
+        public void GetNotificationInfoAsync(object userState) {
+            if ((this.GetNotificationInfoOperationCompleted == null)) {
+                this.GetNotificationInfoOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetNotificationInfoOperationCompleted);
+            }
+            this.InvokeAsync("GetNotificationInfo", new object[0], this.GetNotificationInfoOperationCompleted, userState);
+        }
+        
+        private void OnGetNotificationInfoOperationCompleted(object arg) {
+            if ((this.GetNotificationInfoCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.GetNotificationInfoCompleted(this, new GetNotificationInfoCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/IHTStudioService/GetNotificationInfos", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        [return: System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
+        [return: System.Xml.Serialization.XmlArrayItemAttribute(Namespace="http://schemas.datacontract.org/2004/07/HTStudioService")]
+        public NotificationInfo[] GetNotificationInfos([System.Xml.Serialization.XmlElementAttribute(IsNullable=true)] string softWareName, System.DateTime time, [System.Xml.Serialization.XmlIgnoreAttribute()] bool timeSpecified) {
+            object[] results = this.Invoke("GetNotificationInfos", new object[] {
+                        softWareName,
+                        time,
+                        timeSpecified});
+            return ((NotificationInfo[])(results[0]));
+        }
+        
+        /// <remarks/>
+        public void GetNotificationInfosAsync(string softWareName, System.DateTime time, bool timeSpecified) {
+            this.GetNotificationInfosAsync(softWareName, time, timeSpecified, null);
+        }
+        
+        /// <remarks/>
+        public void GetNotificationInfosAsync(string softWareName, System.DateTime time, bool timeSpecified, object userState) {
+            if ((this.GetNotificationInfosOperationCompleted == null)) {
+                this.GetNotificationInfosOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetNotificationInfosOperationCompleted);
+            }
+            this.InvokeAsync("GetNotificationInfos", new object[] {
+                        softWareName,
+                        time,
+                        timeSpecified}, this.GetNotificationInfosOperationCompleted, userState);
+        }
+        
+        private void OnGetNotificationInfosOperationCompleted(object arg) {
+            if ((this.GetNotificationInfosCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.GetNotificationInfosCompleted(this, new GetNotificationInfosCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/IHTStudioService/ApplyNotification", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void ApplyNotification([System.Xml.Serialization.XmlElementAttribute(IsNullable=true)] string softWareName, [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)] NotificationInfo info, out bool ApplyNotificationResult, [System.Xml.Serialization.XmlIgnoreAttribute()] out bool ApplyNotificationResultSpecified) {
+            object[] results = this.Invoke("ApplyNotification", new object[] {
+                        softWareName,
+                        info});
+            ApplyNotificationResult = ((bool)(results[0]));
+            ApplyNotificationResultSpecified = ((bool)(results[1]));
+        }
+        
+        /// <remarks/>
+        public void ApplyNotificationAsync(string softWareName, NotificationInfo info) {
+            this.ApplyNotificationAsync(softWareName, info, null);
+        }
+        
+        /// <remarks/>
+        public void ApplyNotificationAsync(string softWareName, NotificationInfo info, object userState) {
+            if ((this.ApplyNotificationOperationCompleted == null)) {
+                this.ApplyNotificationOperationCompleted = new System.Threading.SendOrPostCallback(this.OnApplyNotificationOperationCompleted);
+            }
+            this.InvokeAsync("ApplyNotification", new object[] {
+                        softWareName,
+                        info}, this.ApplyNotificationOperationCompleted, userState);
+        }
+        
+        private void OnApplyNotificationOperationCompleted(object arg) {
+            if ((this.ApplyNotificationCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.ApplyNotificationCompleted(this, new ApplyNotificationCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
         public new void CancelAsync(object userState) {
             base.CancelAsync(userState);
         }
@@ -418,6 +528,92 @@ namespace User.HTStudioService {
             }
             set {
                 this.stringValueField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2612.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.datacontract.org/2004/07/HTStudioService")]
+    public partial class NotificationInfo {
+        
+        private string buttonField;
+        
+        private string buttonEventField;
+        
+        private System.DateTime dateTimeField;
+        
+        private bool dateTimeFieldSpecified;
+        
+        private string descriptionField;
+        
+        private string titleField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public string Button {
+            get {
+                return this.buttonField;
+            }
+            set {
+                this.buttonField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public string ButtonEvent {
+            get {
+                return this.buttonEventField;
+            }
+            set {
+                this.buttonEventField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public System.DateTime DateTime {
+            get {
+                return this.dateTimeField;
+            }
+            set {
+                this.dateTimeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool DateTimeSpecified {
+            get {
+                return this.dateTimeFieldSpecified;
+            }
+            set {
+                this.dateTimeFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public string Description {
+            get {
+                return this.descriptionField;
+            }
+            set {
+                this.descriptionField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public string Title {
+            get {
+                return this.titleField;
+            }
+            set {
+                this.titleField = value;
             }
         }
     }
@@ -845,6 +1041,92 @@ namespace User.HTStudioService {
             get {
                 this.RaiseExceptionIfNecessary();
                 return ((DownloadTask[])(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    public delegate void GetNotificationInfoCompletedEventHandler(object sender, GetNotificationInfoCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class GetNotificationInfoCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal GetNotificationInfoCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public NotificationInfo Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((NotificationInfo)(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    public delegate void GetNotificationInfosCompletedEventHandler(object sender, GetNotificationInfosCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class GetNotificationInfosCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal GetNotificationInfosCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public NotificationInfo[] Result {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((NotificationInfo[])(this.results[0]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    public delegate void ApplyNotificationCompletedEventHandler(object sender, ApplyNotificationCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class ApplyNotificationCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal ApplyNotificationCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public bool ApplyNotificationResult {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((bool)(this.results[0]));
+            }
+        }
+        
+        /// <remarks/>
+        public bool ApplyNotificationResultSpecified {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((bool)(this.results[1]));
             }
         }
     }
