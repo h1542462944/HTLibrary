@@ -46,23 +46,23 @@ namespace User.UI
             if (ControlStyle == ControlStyle.Transparent)
             {
                 this.Grid1.Background = Brushes.Transparent;
-                this.Bdr.BorderBrush = ControlBase.UWhiteBrush;
+                this.Bdr.BorderBrush = UserBrushes.RelativeWhiteBrush;
                 this.LabelTitle.Foreground = Brushes.White;
-                Bdr1.Background = ControlBase.UWhiteBrush;
+                Bdr1.Background = UserBrushes.RelativeWhiteBrush;
             }
             else if (ControlStyle == ControlStyle.Light)
             {
-                this.Grid1.Background = ControlBase.LightGrayBrush;
-                this.Bdr.BorderBrush = ControlBase.UBlackBrush;
+                this.Grid1.Background = UserBrushes.LightGrayBrush;
+                this.Bdr.BorderBrush = UserBrushes.RelativeBlackBrush;
                 this.LabelTitle.Foreground = Brushes.Black;
-                Bdr1.Background = ControlBase.UBlackBrush;
+                Bdr1.Background = UserBrushes.RelativeBlackBrush;
             }
             else
             {
-                this.Grid1.Background = ControlBase.DeepGrayBrush;
-                this.Bdr.BorderBrush = ControlBase.UWhiteBrush;
+                this.Grid1.Background = UserBrushes.DeepGrayBrush;
+                this.Bdr.BorderBrush = UserBrushes.RelativeWhiteBrush;
                 this.LabelTitle.Foreground = Brushes.White;
-                Bdr1.Background = ControlBase.UWhiteBrush;
+                Bdr1.Background = UserBrushes.RelativeWhiteBrush;
             }
         }
         void OnTextChanged()

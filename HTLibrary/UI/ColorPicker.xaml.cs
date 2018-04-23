@@ -167,14 +167,14 @@ namespace User.UI
             }
             else if (ControlStyle == ControlStyle.Light)
             {
-                GridMain.Background = ControlBase.DWhiteBrush;
+                GridMain.Background = UserBrushes.DeepWhiteBrush;
                 TbxA.Foreground = Brushes.Black;TbxR.Foreground = Brushes.Black;
                 TbxG.Foreground = Brushes.Black;TbxB.Foreground = Brushes.Black;
                 TbxOk.Foreground = Brushes.Black; TbxCancel.Foreground = Brushes.Black;
             }
             else
             {
-                GridMain.Background = ControlBase.DBlackBrush;
+                GridMain.Background = UserBrushes.DeepBlackBrush;
                 TbxA.Foreground = Brushes.White; TbxR.Foreground = Brushes.White;
                 TbxG.Foreground = Brushes.White; TbxB.Foreground = Brushes.White;
                 TbxOk.Foreground = Brushes.White; TbxCancel.Foreground = Brushes.White;

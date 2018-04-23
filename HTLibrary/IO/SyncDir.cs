@@ -6,10 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace User.IO
-{  
+{
     /// <summary>
-     /// 同步文件夹
-     /// </summary>
+    /// 同步文件夹
+    /// </summary>
     public static class SyncDir
     {
         //private static string sourceStr;
@@ -125,7 +125,8 @@ namespace User.IO
                     {
                         throw new ArgumentException("备份路径不存在");
                     }
-                    File.Delete(dest + u);
+                    await UserIO.SafeDelete(dest + u);
+
                 }
             }
         }

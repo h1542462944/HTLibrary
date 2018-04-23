@@ -23,21 +23,21 @@ namespace User.UI
         TickValue
     }
 
-    public class ControlBase
+    public class UserBrushes
     {
         /// <summary>
         /// 颜色为66FFFFFF的纯色笔刷.
         /// </summary>
-        public static Brush UWhiteBrush => new SolidColorBrush(Color.FromArgb(102, 255, 255, 255));
-        public static Brush UBlackBrush => new SolidColorBrush(Color.FromArgb(102, 0, 0, 0));
+        public static Brush RelativeWhiteBrush => new SolidColorBrush(Color.FromArgb(102, 255, 255, 255));
+        public static Brush RelativeBlackBrush => new SolidColorBrush(Color.FromArgb(102, 0, 0, 0));
         /// <summary>
         /// 颜色为#CCFFFFFF的纯色笔刷.
         /// </summary>
-        public static Brush DWhiteBrush => new SolidColorBrush(Color.FromArgb(204, 255, 255, 255));
+        public static Brush DeepWhiteBrush => new SolidColorBrush(Color.FromArgb(204, 255, 255, 255));
         /// <summary>
         /// 颜色为#CC000000的纯色笔刷.
         /// </summary>
-        public static Brush DBlackBrush => new SolidColorBrush(Color.FromArgb(204, 0, 0, 0));
+        public static Brush DeepBlackBrush => new SolidColorBrush(Color.FromArgb(204, 0, 0, 0));
         /// <summary>
         /// 颜色为#CC333333的纯色笔刷.
         /// </summary>
@@ -46,6 +46,7 @@ namespace User.UI
         /// 颜色为#CCCCCCCC的笔刷.
         /// </summary>
         public static Brush LightGrayBrush => new SolidColorBrush(Color.FromArgb(204, 204, 204, 204));
+        public static Brush ThemeBrushDefault => new SolidColorBrush( ThemeColorDefault);
         public static Color ThemeColorDefault => Color.FromRgb(0x1b, 0x97, 0x73);
         public static Brush GetLinearGradiantBrush(Color color1, Color color2, double percent)
         {
@@ -69,6 +70,8 @@ namespace User.UI
                 return new LinearGradientBrush(new GradientStopCollection(stops), new Point(0, 0.5), new Point(1, 0.5));
             }
         }
+        public static Color WarningColor => Color.FromRgb(235, 149, 20);
+        public static Brush WarningBrush => new SolidColorBrush(WarningColor);
     }
     /// <summary>
     /// 为用户控件提供统一的内容模型.
@@ -82,7 +85,7 @@ namespace User.UI
         public static readonly DependencyProperty IsHighLightProperty =
            DependencyProperty.Register("IsHighLight", typeof(bool), typeof(UControl), new PropertyMetadata(false, new PropertyChangedCallback(IsHighLight_Changed)));
         public static readonly DependencyProperty ThemeColorProperty =
-           DependencyProperty.Register("ThemeColor", typeof(Color), typeof(UControl), new PropertyMetadata(ControlBase.ThemeColorDefault, new PropertyChangedCallback(ThemeColor_Changed)));
+           DependencyProperty.Register("ThemeColor", typeof(Brush), typeof(UControl), new PropertyMetadata(UserBrushes.ThemeBrushDefault, new PropertyChangedCallback(ThemeColor_Changed)));
         bool isLeftMouseDown;
 
         public UControl()
@@ -107,9 +110,9 @@ namespace User.UI
             get { return (bool)GetValue(IsHighLightProperty); }
             set { SetValue(IsHighLightProperty, value); }
         }
-        public Color ThemeColor
+        public Brush ThemeBrush
         {
-            get { return (Color)GetValue(ThemeColorProperty); }
+            get { return (Brush)GetValue(ThemeColorProperty); }
             set { SetValue(ThemeColorProperty, value); }
         }
         public event RoutedEventHandler Tapped;

@@ -37,29 +37,29 @@ namespace User.UI
             {
                 if (!IsChecked)
                     GridMain.Background = Brushes.Transparent;
-                Bdr1.BorderBrush = ControlBase.UWhiteBrush;
-                Bdr.BorderBrush = ControlBase.UWhiteBrush;
+                Bdr1.BorderBrush = UserBrushes.RelativeWhiteBrush;
+                Bdr.BorderBrush = UserBrushes.RelativeWhiteBrush;
             }
             else if (ControlStyle == ControlStyle.Light)
             {
                 if (!IsChecked)
-                    GridMain.Background = ControlBase.LightGrayBrush;
-                Bdr1.BorderBrush = ControlBase.UBlackBrush;
-                Bdr.BorderBrush = ControlBase.UBlackBrush;
+                    GridMain.Background = UserBrushes.LightGrayBrush;
+                Bdr1.BorderBrush = UserBrushes.RelativeBlackBrush;
+                Bdr.BorderBrush = UserBrushes.RelativeBlackBrush;
             }
             else
             {
                 if (!IsChecked)
-                    GridMain.Background = ControlBase.DeepGrayBrush;
-                Bdr1.BorderBrush = ControlBase.UWhiteBrush;
-                Bdr.BorderBrush = ControlBase.UWhiteBrush;
+                    GridMain.Background = UserBrushes.DeepGrayBrush;
+                Bdr1.BorderBrush = UserBrushes.RelativeWhiteBrush;
+                Bdr.BorderBrush = UserBrushes.RelativeWhiteBrush;
             }
         }
         protected override void OnChecked()
         {
             if (IsChecked)
             {
-                GridMain.Background = new SolidColorBrush(ThemeColor);
+                GridMain.Background = ThemeBrush;
             }
             else
             {

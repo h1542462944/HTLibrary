@@ -99,7 +99,28 @@ namespace User
     }
     public static class Extension
     {
-       
+        public static DayOfWeek Next(this DayOfWeek arg)
+        {
+            if ((int)arg == 6)
+            {
+                return DayOfWeek.Sunday;
+            }
+            else
+            {
+                return (DayOfWeek)((int)arg + 1);
+            }
+        }
+        public static DayOfWeek Pre(this DayOfWeek arg)
+        {
+            if ((int) arg == 0)
+            {
+                return DayOfWeek.Saturday;
+            }
+            else
+            {
+                return (DayOfWeek)((int)arg - 1);
+            }
+        }
         public static string GetDateString(this DateTime arg)
         {
             string[] ts = arg.ToShortDateString().Split('/');

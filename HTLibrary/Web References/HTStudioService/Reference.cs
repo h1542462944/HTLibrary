@@ -23,7 +23,7 @@ namespace User.HTStudioService {
     
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Web.Services.WebServiceBindingAttribute(Name="BasicHttpBinding_IHTStudioService", Namespace="http://tempuri.org/")]
@@ -36,6 +36,8 @@ namespace User.HTStudioService {
         private System.Threading.SendOrPostCallback GetDownloadTaskFromFileOperationCompleted;
         
         private System.Threading.SendOrPostCallback DownloadOperationCompleted;
+        
+        private System.Threading.SendOrPostCallback UpLoadOperationCompleted;
         
         private System.Threading.SendOrPostCallback GetExtendedPathOperationCompleted;
         
@@ -100,6 +102,9 @@ namespace User.HTStudioService {
         
         /// <remarks/>
         public event DownloadCompletedEventHandler DownloadCompleted;
+        
+        /// <remarks/>
+        public event UpLoadCompletedEventHandler UpLoadCompleted;
         
         /// <remarks/>
         public event GetExtendedPathCompletedEventHandler GetExtendedPathCompleted;
@@ -245,6 +250,36 @@ namespace User.HTStudioService {
             if ((this.DownloadCompleted != null)) {
                 System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
                 this.DownloadCompleted(this, new DownloadCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            }
+        }
+        
+        /// <remarks/>
+        [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/IHTStudioService/UpLoad", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+        public void UpLoad([System.Xml.Serialization.XmlElementAttribute(IsNullable=true)] UpLoadTask task, out bool UpLoadResult, [System.Xml.Serialization.XmlIgnoreAttribute()] out bool UpLoadResultSpecified) {
+            object[] results = this.Invoke("UpLoad", new object[] {
+                        task});
+            UpLoadResult = ((bool)(results[0]));
+            UpLoadResultSpecified = ((bool)(results[1]));
+        }
+        
+        /// <remarks/>
+        public void UpLoadAsync(UpLoadTask task) {
+            this.UpLoadAsync(task, null);
+        }
+        
+        /// <remarks/>
+        public void UpLoadAsync(UpLoadTask task, object userState) {
+            if ((this.UpLoadOperationCompleted == null)) {
+                this.UpLoadOperationCompleted = new System.Threading.SendOrPostCallback(this.OnUpLoadOperationCompleted);
+            }
+            this.InvokeAsync("UpLoad", new object[] {
+                        task}, this.UpLoadOperationCompleted, userState);
+        }
+        
+        private void OnUpLoadOperationCompleted(object arg) {
+            if ((this.UpLoadCompleted != null)) {
+                System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+                this.UpLoadCompleted(this, new UpLoadCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
             }
         }
         
@@ -624,13 +659,15 @@ namespace User.HTStudioService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.datacontract.org/2004/07/HTStudioService")]
-    public partial class DownloadResult {
+    public partial class UpLoadTask {
         
         private byte[] dataField;
         
-        private bool isSucceedField;
+        private int indexOfField;
         
-        private bool isSucceedFieldSpecified;
+        private bool indexOfFieldSpecified;
+        
+        private ExtendedPath pathField;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(DataType="base64Binary", IsNullable=true)]
@@ -644,23 +681,34 @@ namespace User.HTStudioService {
         }
         
         /// <remarks/>
-        public bool IsSucceed {
+        public int IndexOf {
             get {
-                return this.isSucceedField;
+                return this.indexOfField;
             }
             set {
-                this.isSucceedField = value;
+                this.indexOfField = value;
             }
         }
         
         /// <remarks/>
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool IsSucceedSpecified {
+        public bool IndexOfSpecified {
             get {
-                return this.isSucceedFieldSpecified;
+                return this.indexOfFieldSpecified;
             }
             set {
-                this.isSucceedFieldSpecified = value;
+                this.indexOfFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public ExtendedPath Path {
+            get {
+                return this.pathField;
+            }
+            set {
+                this.pathField = value;
             }
         }
     }
@@ -709,6 +757,53 @@ namespace User.HTStudioService {
             }
             set {
                 this.rootField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.2612.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.datacontract.org/2004/07/HTStudioService")]
+    public partial class DownloadResult {
+        
+        private byte[] dataField;
+        
+        private bool isSucceedField;
+        
+        private bool isSucceedFieldSpecified;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(DataType="base64Binary", IsNullable=true)]
+        public byte[] Data {
+            get {
+                return this.dataField;
+            }
+            set {
+                this.dataField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public bool IsSucceed {
+            get {
+                return this.isSucceedField;
+            }
+            set {
+                this.isSucceedField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool IsSucceedSpecified {
+            get {
+                return this.isSucceedFieldSpecified;
+            }
+            set {
+                this.isSucceedFieldSpecified = value;
             }
         }
     }
@@ -830,11 +925,11 @@ namespace User.HTStudioService {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetDataCompletedEventHandler(object sender, GetDataCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class GetDataCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -856,11 +951,11 @@ namespace User.HTStudioService {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetDataUsingDataContractCompletedEventHandler(object sender, GetDataUsingDataContractCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class GetDataUsingDataContractCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -882,11 +977,11 @@ namespace User.HTStudioService {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetDownloadTaskFromFileCompletedEventHandler(object sender, GetDownloadTaskFromFileCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class GetDownloadTaskFromFileCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -908,11 +1003,11 @@ namespace User.HTStudioService {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void DownloadCompletedEventHandler(object sender, DownloadCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class DownloadCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -934,11 +1029,45 @@ namespace User.HTStudioService {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
+    public delegate void UpLoadCompletedEventHandler(object sender, UpLoadCompletedEventArgs e);
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    public partial class UpLoadCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+        
+        private object[] results;
+        
+        internal UpLoadCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+                base(exception, cancelled, userState) {
+            this.results = results;
+        }
+        
+        /// <remarks/>
+        public bool UpLoadResult {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((bool)(this.results[0]));
+            }
+        }
+        
+        /// <remarks/>
+        public bool UpLoadResultSpecified {
+            get {
+                this.RaiseExceptionIfNecessary();
+                return ((bool)(this.results[1]));
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetExtendedPathCompletedEventHandler(object sender, GetExtendedPathCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class GetExtendedPathCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -960,11 +1089,11 @@ namespace User.HTStudioService {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void CheckUpdateCompletedEventHandler(object sender, CheckUpdateCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class CheckUpdateCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -994,11 +1123,11 @@ namespace User.HTStudioService {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetSoftWareVersionCompletedEventHandler(object sender, GetSoftWareVersionCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class GetSoftWareVersionCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -1020,11 +1149,11 @@ namespace User.HTStudioService {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetUpdateTaskCompletedEventHandler(object sender, GetUpdateTaskCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class GetUpdateTaskCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -1046,11 +1175,11 @@ namespace User.HTStudioService {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetNotificationInfoCompletedEventHandler(object sender, GetNotificationInfoCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class GetNotificationInfoCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -1072,11 +1201,11 @@ namespace User.HTStudioService {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void GetNotificationInfosCompletedEventHandler(object sender, GetNotificationInfosCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class GetNotificationInfosCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
@@ -1098,11 +1227,11 @@ namespace User.HTStudioService {
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     public delegate void ApplyNotificationCompletedEventHandler(object sender, ApplyNotificationCompletedEventArgs e);
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2556.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Web.Services", "4.7.2046.0")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     public partial class ApplyNotificationCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {

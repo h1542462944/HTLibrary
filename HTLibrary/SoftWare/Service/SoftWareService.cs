@@ -8,6 +8,9 @@ using User.HTStudioService;
 
 namespace User.SoftWare.Service
 {
+    /// <summary>
+    /// 为软件提供相应的服务.
+    /// </summary>
     public class SoftWareService
     {
         public SoftWareService(Version version, string softWareName)
@@ -15,12 +18,22 @@ namespace User.SoftWare.Service
             Version = version;
             SoftWareName = softWareName;
         }
+
         public Version Version { get; private set; }
         public string SoftWareName { get; private set; }
+        /// <summary>
+        /// 软件的根目录.
+        /// </summary>
         public string Root { get; set; } = AppDomain.CurrentDomain.BaseDirectory;
-        public string Folder => Root + @"SoftWareCache\";
-        public string UpdateFolder => Folder + @"Update\";
-        public string UpdateBackupFolder => Folder + @"UpdateBackup";
+        /// <summary>
+        /// 服务缓存文件夹.
+        /// </summary>
+        public string ServiceCache => Root + @"ServiceCache\";
+        /// <summary>
+        /// 更新文件夹.
+        /// </summary>
+        public string UpdateCache => ServiceCache + @"Update\";
+
         bool IsDownloading { get; set; } = false;
         HTStudioService.HTStudioService service = new HTStudioService.HTStudioService();
         DownloadTask[] CurrentTask { get; set; }
@@ -59,7 +72,7 @@ namespace User.SoftWare.Service
             }
         }
         /// <summary>
-        /// 下载更新,下载到<see cref="UpdateFolder"/>指定的文件夹,并触发<see cref="ChannelFreshed"/>事件,以显示进度.
+        /// 下载更新,下载到<see cref="UpdateCache"/>指定的文件夹,并触发<see cref="ChannelFreshed"/>事件,以显示进度.
         /// </summary>
         public void DownloadUpdate()
         {
@@ -81,8 +94,8 @@ namespace User.SoftWare.Service
                     }
                     foreach (var item in task)
                     {
-                        Directory.CreateDirectory(Path.GetDirectoryName(UpdateFolder + item.ExtendedPath.Last));
-                        using (FileStream fs = new FileStream(UpdateFolder + item.ExtendedPath.Last, FileMode.Create))
+                        Directory.CreateDirectory(Path.GetDirectoryName(UpdateCache + item.ExtendedPath.Last));
+                        using (FileStream fs = new FileStream(UpdateCache + item.ExtendedPath.Last, FileMode.Create))
                         {
                             for (int i = 0; i < item.Num; i++)
                             {
@@ -97,7 +110,7 @@ namespace User.SoftWare.Service
                         }
                     }
                     ChannelFreshed?.Invoke(this, new ChannelFreshEventArgs(ChannelState.Completed));
-                    File.WriteAllText(UpdateFolder + "UpdateInfo.txt", Version.ToString());
+                    File.WriteAllText(UpdateCache + "UpdateInfo.txt", Version.ToString());
                 }
                 catch (IOException)
                 {
@@ -111,22 +124,22 @@ namespace User.SoftWare.Service
             }
         }
         /// <summary>
-        /// 正式更新,将<see cref="UpdateFolder"/>中的文件复制到<see cref="AppDomain.BaseDirectory"/>.
+        /// 正式更新,将<see cref="UpdateCache"/>中的文件复制到<see cref="Root"/>.
         /// </summary>
         public void ApplyUpdate()
         {
             try
             {
-                foreach (var item in new DirectoryInfo(UpdateFolder).GetFiles())
+                foreach (var item in new DirectoryInfo(UpdateCache).GetFiles())
                 {
-                    string newpath = Root + Tools.GetRelativePath(item.FullName, UpdateFolder);
-                    if (Tools.GetRelativePath(item.FullName, UpdateFolder) != "UpdateInfo.txt")
+                    string newpath = Root + Tools.GetRelativePath(item.FullName, UpdateCache);
+                    if (Tools.GetRelativePath(item.FullName, UpdateCache) != "UpdateInfo.txt")
                     {
                         File.Copy(item.FullName, newpath, true);
                         File.Delete(item.FullName);
                     }
                 }
-                File.Delete(UpdateFolder + "UpdateInfo.txt");
+                File.Delete(UpdateCache + "UpdateInfo.txt");
             }
             catch (Exception)
             {
@@ -134,11 +147,34 @@ namespace User.SoftWare.Service
             }
             UpdateCompleted?.Invoke(this, true);
         }
+        public void UploadUpdate(IEnumerable<FileSystemInfo> infos)
+        {
+            List<FileInfo> files = new List<FileInfo>();
+            foreach (var item in infos)
+            {
+                if (item is FileInfo e1)
+                {
+                    files.Add(e1);
+                }
+                else if(item is DirectoryInfo e2)
+                {
+                    files.AddRange( e2.GetFiles("*", SearchOption.AllDirectories));
+                    
+                }
+            }
+            foreach (var info in files)
+            {
+                //目标文件路径.
+                ExtendedPath epath = new ExtendedPath() { Root = "", Middle = @"SoftWare\" + SoftWareName + @"\Update\" + Version + @"\", Last = Tools.GetRelativePath(info.FullName, Root) };
+                
+            }
+        }
+
         bool CheckHasDownload()
         {
-            if (File.Exists(UpdateFolder + "UpdateInfo.txt"))
+            if (File.Exists(UpdateCache + "UpdateInfo.txt"))
             {
-                string s = File.ReadAllLines(UpdateFolder + "UpdateInfo.txt")[0];
+                string s = File.ReadAllLines(UpdateCache + "UpdateInfo.txt")[0];
                 if (Version.TryParse(s, out Version v))
                 {
                     if (v >= Version)
@@ -200,6 +236,7 @@ namespace User.SoftWare.Service
     public enum ChannelState
     {
         Doing,
+        DoingOfUpdate,
         Failed,
         FileFailed,
         Completed,

@@ -77,19 +77,19 @@ namespace User.UI
             if (ControlStyle == ControlStyle.Transparent)
             {
                 this.BdrBack.Background = Brushes.Transparent;
-                this.Bdr.BorderBrush = ControlBase.UWhiteBrush;
+                this.Bdr.BorderBrush = UserBrushes.RelativeWhiteBrush;
                 this.BdrHighlight.BorderBrush = Brushes.White;
             }
             else if (ControlStyle == ControlStyle.Light)
             {
-                this.BdrBack.Background = ControlBase.DWhiteBrush;
-                this.Bdr.BorderBrush = ControlBase.UBlackBrush;
+                this.BdrBack.Background = UserBrushes.DeepWhiteBrush;
+                this.Bdr.BorderBrush = UserBrushes.RelativeBlackBrush;
                 this.BdrHighlight.BorderBrush = Brushes.Black;
             }
             else
             {
-                this.BdrBack.Background = ControlBase.DBlackBrush;
-                this.Bdr.BorderBrush = ControlBase.UWhiteBrush;
+                this.BdrBack.Background = UserBrushes.DeepBlackBrush;
+                this.Bdr.BorderBrush = UserBrushes.RelativeWhiteBrush;
                 this.BdrHighlight.BorderBrush = Brushes.White;
             }
         }

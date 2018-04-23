@@ -6,7 +6,7 @@
       <Value Profile="(Default)">http://www.webxml.com.cn/WebServices/WeatherWebService.asmx</Value>
     </Setting>
     <Setting Name="HTLibrary_HTStudioService_HTStudioService" Type="(Web Service URL)" Scope="Application">
-      <Value Profile="(Default)">http://localhost:52623/HTStudioService.svc</Value>
+      <Value Profile="(Default)">http://192.168.2.62:81/HTStudioService.svc</Value>
     </Setting>
   </Settings>
 </SettingsFile>

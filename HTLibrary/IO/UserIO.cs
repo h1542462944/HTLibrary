@@ -81,7 +81,7 @@ namespace User.IO
         }
 
         /// <summary>
-        /// 
+        /// 安全的复制
         /// </summary>
         /// <param name="sourceFilePath"></param>
         /// <param name="destFilePath"></param>
@@ -120,6 +120,35 @@ namespace User.IO
                 }
 
 
+            });
+            return isSuccess;
+        }
+
+        public static async Task<bool> SafeDelete(string path,int waitTime=200,int n=3) {
+            if (!File.Exists(path))
+            {
+                throw new ArgumentException();
+            }
+            bool isSuccess = false;
+            await Task.Run(() =>
+            {
+                for (int i = 0; i < n; i++)
+                {
+                    try
+                    {
+                        File.Delete(path);
+                        isSuccess = true;
+                        break;
+                    }
+                    catch (Exception)
+                    {
+                        Thread.Sleep(waitTime);
+                    }
+                    if (i == n - 1)
+                    {
+                        isSuccess = false;
+                    }
+                }
             });
             return isSuccess;
         }

@@ -44,8 +44,8 @@ namespace User.UI
                 }
                 else
                 {
-                    Path1.Stroke = new SolidColorBrush(this.ThemeColor);
-                    Path1.Fill = new SolidColorBrush(this.ThemeColor);
+                    Path1.Stroke = ThemeBrush;
+                    Path1.Fill = ThemeBrush;
                     Elp1.Fill = Brushes.White;
                     Elp1.Margin = new Thickness(32, 5.5, 0, 0);
                 }
@@ -150,8 +150,8 @@ namespace User.UI
             {
                 if (e.LeftButton == MouseButtonState.Pressed)
                 {
-                    Path1.Stroke = new SolidColorBrush(ThemeColor);
-                    Path1.Fill = new SolidColorBrush(ThemeColor);
+                    Path1.Stroke = ThemeBrush;
+                    Path1.Fill = ThemeBrush;
                     IsHighLight = false;
                 }
             }
@@ -167,8 +167,8 @@ namespace User.UI
             {
                 if (Mouse.LeftButton == MouseButtonState.Pressed)
                 {
-                    Path1.Stroke = new SolidColorBrush(ThemeColor);
-                    Path1.Fill = new SolidColorBrush(ThemeColor);
+                    Path1.Stroke = ThemeBrush;
+                    Path1.Fill = ThemeBrush;
                 }
                 if (IsChecked && IsOpened)
                 {

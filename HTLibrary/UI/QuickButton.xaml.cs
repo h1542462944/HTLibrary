@@ -66,38 +66,38 @@ namespace User.UI
             {
                 if (!IsChecked)
                     GridMain.Background = Brushes.Transparent;
-                Bdr1.BorderBrush = ControlBase.UWhiteBrush;
-                Bdr2.BorderBrush = ControlBase.UWhiteBrush;
-                Bdr.BorderBrush = ControlBase.UWhiteBrush;
-                Lbl1.Foreground = ControlBase.DWhiteBrush;
-                LblTitle.Foreground = ControlBase.DWhiteBrush;
+                Bdr1.BorderBrush = UserBrushes.RelativeWhiteBrush;
+                Bdr2.BorderBrush = UserBrushes.RelativeWhiteBrush;
+                Bdr.BorderBrush = UserBrushes.RelativeWhiteBrush;
+                Lbl1.Foreground = UserBrushes.DeepWhiteBrush;
+                LblTitle.Foreground = UserBrushes.DeepWhiteBrush;
             }
             else if (ControlStyle == ControlStyle.Light)
             {
                 if (!IsChecked)
-                    GridMain.Background = ControlBase.LightGrayBrush;
-                Bdr1.BorderBrush = ControlBase.UBlackBrush;
-                Bdr2.BorderBrush = ControlBase.UBlackBrush;
-                Bdr.BorderBrush = ControlBase.UBlackBrush;
-                Lbl1.Foreground = ControlBase.DBlackBrush;
-                LblTitle.Foreground = ControlBase.DBlackBrush;
+                    GridMain.Background = UserBrushes.LightGrayBrush;
+                Bdr1.BorderBrush = UserBrushes.RelativeBlackBrush;
+                Bdr2.BorderBrush = UserBrushes.RelativeBlackBrush;
+                Bdr.BorderBrush = UserBrushes.RelativeBlackBrush;
+                Lbl1.Foreground = UserBrushes.DeepBlackBrush;
+                LblTitle.Foreground = UserBrushes.DeepBlackBrush;
             }
             else
             {
                 if (!IsChecked)
-                    GridMain.Background = ControlBase.DeepGrayBrush;
-                Bdr1.BorderBrush = ControlBase.UWhiteBrush;
-                Bdr2.BorderBrush = ControlBase.UWhiteBrush;
-                Bdr.BorderBrush = ControlBase.UWhiteBrush;
-                Lbl1.Foreground = ControlBase.DWhiteBrush;
-                LblTitle.Foreground = ControlBase.DWhiteBrush;
+                    GridMain.Background = UserBrushes.DeepGrayBrush;
+                Bdr1.BorderBrush = UserBrushes.RelativeWhiteBrush;
+                Bdr2.BorderBrush = UserBrushes.RelativeWhiteBrush;
+                Bdr.BorderBrush = UserBrushes.RelativeWhiteBrush;
+                Lbl1.Foreground = UserBrushes.DeepWhiteBrush;
+                LblTitle.Foreground = UserBrushes.DeepWhiteBrush;
             }
         }
         protected override void OnChecked()
         {
             if (IsChecked)
             {
-                GridMain.Background = new SolidColorBrush(ThemeColor);
+                GridMain.Background = ThemeBrush;
             }
             else
             {

@@ -114,8 +114,8 @@ namespace User.UI
                 }
                 GradientStop[] stops = new GradientStop[]
                 {
-                    new GradientStop(ThemeColor,0),
-                    new GradientStop(ThemeColor,bi),
+                    new GradientStop(UserBrushes.ThemeColorDefault,0),
+                    new GradientStop(UserBrushes.ThemeColorDefault,bi),
                     new GradientStop(cb,bi),
                     new GradientStop(cb,1)
                 };
@@ -164,12 +164,12 @@ namespace User.UI
         {
             if (ControlStyle == ControlStyle.Light)
             {
-                BdrM.Background = ControlBase.UBlackBrush;
+                BdrM.Background = UserBrushes.RelativeBlackBrush;
                 BdrHighlight.BorderBrush = Brushes.Black;
             }
             else
             {
-                BdrM.Background = ControlBase.UWhiteBrush;
+                BdrM.Background = UserBrushes.RelativeWhiteBrush;
                 BdrHighlight.BorderBrush = Brushes.White;
             }
             OnSlideValueChanged();
@@ -212,8 +212,8 @@ namespace User.UI
                 }
                 GradientStop[] stops = new GradientStop[]
                 {
-                    new GradientStop(ThemeColor,0),
-                    new GradientStop(ThemeColor,bi),
+                    new GradientStop(UserBrushes.ThemeColorDefault,0),
+                    new GradientStop(UserBrushes.ThemeColorDefault,bi),
                     new GradientStop(cb,bi),
                     new GradientStop(cb,1)
                 };
@@ -277,11 +277,11 @@ namespace User.UI
             }
             if (ControlStyle == ControlStyle.Light)
             {
-                BdrM.Background = ControlBase.DBlackBrush;
+                BdrM.Background = UserBrushes.DeepBlackBrush;
             }
             else
             {
-                BdrM.Background = ControlBase.DWhiteBrush;
+                BdrM.Background = UserBrushes.DeepWhiteBrush;
             }
         }
         private void Grid_MouseUp(object sender, MouseButtonEventArgs e)
@@ -293,11 +293,11 @@ namespace User.UI
             //isLeftMouseDown = false;
             if (ControlStyle == ControlStyle.Light)
             {
-                BdrM.Background = ControlBase.UBlackBrush;
+                BdrM.Background = UserBrushes.RelativeBlackBrush;
             }
             else
             {
-                BdrM.Background = ControlBase.UWhiteBrush;
+                BdrM.Background = UserBrushes.RelativeWhiteBrush;
             }
         }
 

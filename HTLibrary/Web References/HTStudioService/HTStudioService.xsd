@@ -31,6 +31,14 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="DownloadResult" nillable="true" type="tns:DownloadResult" />
+  <xs:complexType name="UpLoadTask">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Data" nillable="true" type="xs:base64Binary" />
+      <xs:element minOccurs="0" name="IndexOf" type="xs:int" />
+      <xs:element minOccurs="0" name="Path" nillable="true" type="tns:ExtendedPath" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="UpLoadTask" nillable="true" type="tns:UpLoadTask" />
   <xs:simpleType name="UpdateType">
     <xs:restriction base="xs:string">
       <xs:enumeration value="None" />

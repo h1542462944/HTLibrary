@@ -74,6 +74,8 @@
     <Compile Include="SoftWare\Service\Notification.cs" />
     <Compile Include="SoftWare\Service\SoftWareService.cs" />
     <Compile Include="SoftWare\Service\WeatherText.cs" />
+    <Compile Include="SoftWare\TimeMix\TimeMixProvider.cs" />
+    <Compile Include="SoftWare\TimeMix\TimeTable.cs" />
     <Compile Include="SoftWare\ULogger.cs" />
     <Compile Include="SoftWare\USettings.cs" />
     <Compile Include="SoftWare\HTStudio\Service.cs" />
@@ -165,10 +167,10 @@
     <WebReferences Include="Web References\" />
   </ItemGroup>
   <ItemGroup>
-    <WebReferenceUrl Include="http://localhost:52623/HTStudioService.svc">
+    <WebReferenceUrl Include="http://192.168.2.62:81/HTStudioService.svc">
       <UrlBehavior>Dynamic</UrlBehavior>
       <RelPath>Web References\HTStudioService\</RelPath>
-      <UpdateFromURL>http://localhost:52623/HTStudioService.svc</UpdateFromURL>
+      <UpdateFromURL>http://192.168.2.62:81/HTStudioService.svc</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
@@ -237,6 +239,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Web References\HTStudioService\HTStudioService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="SoftWare\Service\Advanced\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
