@@ -33,6 +33,10 @@ namespace User.SoftWare
         {
             innerloggerrecorder.Write(ex);
         }
+        public static void WriteInfo(string type, string info)
+        {
+            innerloggerrecorder.Write(new string[] { type, info });
+        }
     }
     /// <summary>
     /// 数据记录器.
@@ -41,7 +45,7 @@ namespace User.SoftWare
     {
         protected override string Comment => "这是用于记录错误信息的文件";
         protected override string FileType => "logger";
-        protected override string FileVersion => "1.0.0.0";
+        protected override string FileVersion => "1.0.0.1";
 
         public ULoggerRecorder(string folder)
         {
@@ -54,28 +58,24 @@ namespace User.SoftWare
             if (!File.Exists(FilePath))
             {
                 CreateXml();
-                Write(ex);
             }
-            else
-            {
-                XDocument xDocument = XDocument.Load(FilePath);
-                xDocument.Root.Add(ConvertToXElement(ex));
-                xDocument.Save(FilePath);
-            }
+
+            XDocument xDocument = XDocument.Load(FilePath);
+            xDocument.Root.Add(ConvertToXElement(ex));
+            xDocument.Save(FilePath);
+
         }
         public void Write(params object[] message)
         {
             if (!File.Exists(FilePath))
             {
                 CreateXml();
-                Write(message);
             }
-            else
-            {
-                XDocument xDocument = XDocument.Load(FilePath);
-                xDocument.Root.Add(ConvertToXElement(message));
-                xDocument.Save(FilePath);
-            }
+
+            XDocument xDocument = XDocument.Load(FilePath);
+            xDocument.Root.Add(ConvertToXElement(message));
+            xDocument.Save(FilePath);
+
         }
 
         private XElement ConvertToXElement(Exception ex)
