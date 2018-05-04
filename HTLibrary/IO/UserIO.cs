@@ -92,12 +92,11 @@ namespace User.IO
         {
             if (!File.Exists(sourceFilePath))
             {
+#if DEBUG
                 throw new ArgumentException();
+#endif
+                return false;
             }
-            //if (!File.Exists(destFilePath))
-            //{
-            //    throw new ArgumentException();
-            //}
             bool isSuccess = false;
             await Task.Run(() =>
             {
@@ -124,10 +123,14 @@ namespace User.IO
             return isSuccess;
         }
 
-        public static async Task<bool> SafeDelete(string path,int waitTime=200,int n=3) {
+        public static async Task<bool> SafeDelete(string path, int waitTime = 200, int n = 3)
+        {
             if (!File.Exists(path))
             {
+#if DEBUG
                 throw new ArgumentException();
+#endif
+                return false;
             }
             bool isSuccess = false;
             await Task.Run(() =>
